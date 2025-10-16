@@ -1,0 +1,6 @@
+GET http://localhost:9080/historyapi/api/users/367af1b4-7270-4044-83cb-766ecfc81510s
+Accept: application/json
+
+###
+GET  http://localhost:9080/historyapi/api/users
+

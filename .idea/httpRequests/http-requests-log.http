@@ -1,0 +1,119 @@
+GET http://localhost:9080/historyapi/api/users/367af1b4-7270-4044-83cb-766ecfc81510s
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:9080/historyapi/api/users/367af1b4-7270-4044-83cb-766ecfc81510
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T230442.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T230427.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users/49c99890-9535-41b4-9006-d59312479e58
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Content-Length: 84
+Content-Type: */*; charset=UTF-8
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+GET  http://localhost:9080/historyapi/api/users/49c99890-9535-41b4-9006-d59312479e58
+
+<> 2025-10-15T230257.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Content-Length: 84
+Content-Type: */*; charset=UTF-8
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+GET  http://localhost:9080/historyapi/api/users/49c99890-9535-41b4-9006-d59312479e58
+
+<> 2025-10-15T230253.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Content-Length: 84
+Content-Type: */*; charset=UTF-8
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+GET  http://localhost:9080/historyapi/api/users/49c99890-9535-41b4-9006-d59312479e58
+
+<> 2025-10-15T225948.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T225909.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/userser
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T225822.404.html
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T225816.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T225144.200.json
+
+###
+
+GET http://localhost:9080/historyapi/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.12)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-10-15T224114.404.html
+
+###
+
