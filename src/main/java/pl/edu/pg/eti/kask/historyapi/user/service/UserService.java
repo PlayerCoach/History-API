@@ -8,25 +8,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class UserService {
-    private final UserRepository repo;
 
-    public UserService(UserRepository repo) {
-        this.repo = repo;
+
+    public static List<User> findAll() {
+        return UserRepository.findAll();
     }
 
-    public List<User> getAll() {
-        return repo.findAll();
+    public static Optional<User> findById(UUID id) {
+        return UserRepository.findById(id);
     }
 
-    public Optional<User> get(UUID id) {
-        return repo.findById(id);
-    }
 
-//    public void create(User user) {
-//        repo.create(user);
-//    }
-//
-//    public void update(User user) {
-//        repo.update(user);
-//    }
 }

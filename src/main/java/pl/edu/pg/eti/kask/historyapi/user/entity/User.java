@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import pl.edu.pg.eti.kask.historyapi.note.Note;
 
@@ -19,13 +20,17 @@ public class User implements Serializable {
     private UUID id;
     private String login;
 
+    @JsonIgnore
     private LocalDate birthday;
 
     @ToString.Exclude
+    @JsonIgnore
     private String password;
 
     private String email;
+    @JsonIgnore
     Role role;
+    @JsonIgnore
     List<Note> createdNotes; // 1:N relationship
 
     /*
