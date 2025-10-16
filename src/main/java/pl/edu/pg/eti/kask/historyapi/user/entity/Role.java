@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.historyapi.model.user;
+package pl.edu.pg.eti.kask.historyapi.user.entity;
 
 import java.io.Serializable;
 

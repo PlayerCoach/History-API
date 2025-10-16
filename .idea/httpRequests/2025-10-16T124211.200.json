@@ -1,0 +1,20 @@
+{
+  "id": "0df0fd71-ea74-4b79-a8ff-c0e36ea1b802",
+  "login": "olaf",
+  "email": "olaf@example.com"
+}
+{
+  "id": "c2587a82-001d-4cd9-ab28-b2a86e4a5cc6",
+  "login": "john",
+  "email": "john@example.com"
+}
+{
+  "id": "f66a27d8-e492-4809-b9d5-6ad1cbcfaf2e",
+  "login": "anna",
+  "email": "anna@example.com"
+}
+{
+  "id": "60743843-5608-465f-a358-59720e41db7a",
+  "login": "mike",
+  "email": "mike@example.com"
+}

@@ -5,24 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cc56c8c-a778-40aa-8fe6-5723530c342f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests.http" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/repository/Repository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/AvatatServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/UserServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/liberty/config/server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/beans.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/ibm-web-ext.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/avatar/AvatarService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/avatars/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/avatars/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/avatars/3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/avatars/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/model/historicalfigure/HistoricalFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/historicalfigure/HistoricalFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/model/note/Mode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/note/Mode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/model/note/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/note/Note.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/model/user/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/model/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/repository/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/user/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/AvatatServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/AvatarServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/UserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/edu/pg/eti/kask/historyapi/servlet/UserServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,29 +58,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;HTTP Request.All in requests.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | #1.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | #2.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.History-API [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.History-API [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.History-API [liberty:dev].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.History-API [package].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/olafj/Desktop/api test/History-API_2&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "HTTP Request.All in requests.executor": "Run",
+    "HTTP Request.requests | #1.executor": "Run",
+    "HTTP Request.requests | #2.executor": "Run",
+    "HTTP Request.requests | #3.executor": "Run",
+    "HTTP Request.requests | #4.executor": "Run",
+    "Maven.History-API [clean].executor": "Run",
+    "Maven.History-API [install].executor": "Run",
+    "Maven.History-API [liberty:dev].executor": "Run",
+    "Maven.History-API [package].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/olafj/Desktop/API/History-API/src/main/resources/avatars",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "inlay.hints",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\olafj\Desktop\API\History-API\src\main\resources\avatars" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\olafj\Desktop\API\History-API\src\main\java\pl\edu\pg\eti\kask\historyapi\model" />
       <recent name="C:\Users\olafj\Desktop\API\History-API\src\main\java\pl\edu\pg\eti\kask\historyapi\repository" />
@@ -90,7 +99,7 @@
       <command value="mvn liberty:dev" />
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.requests | #1">
+  <component name="RunManager" selected="HTTP Request.requests | #3">
     <configuration name="All in requests" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/requests.http">
       <method v="2" />
     </configuration>
@@ -100,10 +109,18 @@
     <configuration name="requests | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests.http" index="2" requestIdentifier="#2" runType="Run single request">
       <method v="2" />
     </configuration>
+    <configuration name="requests | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests.http" index="3" requestIdentifier="#3" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="requests | #4" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests.http" index="4" requestIdentifier="#4" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.requests | #1" />
+        <item itemvalue="HTTP Request.requests | #3" />
+        <item itemvalue="HTTP Request.requests | #4" />
         <item itemvalue="HTTP Request.requests | #2" />
+        <item itemvalue="HTTP Request.requests | #1" />
         <item itemvalue="HTTP Request.All in requests" />
       </list>
     </recent_temporary>
@@ -119,7 +136,7 @@
       <workItem from="1760559559678" duration="639000" />
       <workItem from="1760560216227" duration="1374000" />
       <workItem from="1760561621644" duration="2064000" />
-      <workItem from="1760605369462" duration="419000" />
+      <workItem from="1760605369462" duration="5525000" />
     </task>
     <servers />
   </component>

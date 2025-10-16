@@ -1,7 +1,7 @@
-package pl.edu.pg.eti.kask.historyapi.model.note;
+package pl.edu.pg.eti.kask.historyapi.note;
 
 import lombok.*;
-import pl.edu.pg.eti.kask.historyapi.model.historicalfigure.HistoricalFigure;
+import pl.edu.pg.eti.kask.historyapi.historicalfigure.HistoricalFigure;
 
 import java.io.Serializable;
 import java.util.UUID;

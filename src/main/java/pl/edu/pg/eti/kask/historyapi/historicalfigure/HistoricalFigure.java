@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.historyapi.model.historicalfigure;
+package pl.edu.pg.eti.kask.historyapi.historicalfigure;
 
 
 import lombok.*;

@@ -4,14 +4,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import pl.edu.pg.eti.kask.historyapi.repository.Repository;
+import pl.edu.pg.eti.kask.historyapi.user.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @WebServlet("/api/users/*")
 public class UserServlet extends HttpServlet {
-    private final Repository repo = new Repository();
+    private final UserRepository repo = new UserRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -19,7 +19,7 @@ public class UserServlet extends HttpServlet {
         String path = req.getPathInfo();
 
         if (path == null || path.equals("/")) {
-            for (var user : repo.getAllUsers()) {
+            for (var user : repo.findAll()) {
                 String userJson = user.ToJsonString();
                 resp.getWriter().println(userJson);
             }
@@ -28,7 +28,7 @@ public class UserServlet extends HttpServlet {
 
         try {
             UUID id = UUID.fromString(path.substring(1));
-            repo.getUser(id)
+            repo.findById(id)
                     .ifPresentOrElse(
                             user -> {
                                 try {

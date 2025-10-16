@@ -1,13 +1,13 @@
-package pl.edu.pg.eti.kask.historyapi.repository;
+package pl.edu.pg.eti.kask.historyapi.user.repository;
 
-import pl.edu.pg.eti.kask.historyapi.model.user.User;
+import pl.edu.pg.eti.kask.historyapi.user.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Repository {
+public class UserRepository {
 
     private static final List<User> users = new ArrayList<>();
 
@@ -18,9 +18,9 @@ public class Repository {
         users.add(new User(UUID.randomUUID(), "mike", "mike@example.com"));
     }
 
-    public List<User> getAllUsers() { return users; }
+    public List<User> findAll() { return users; }
 
-    public Optional<User> getUser(UUID id) {
+    public Optional<User> findById(UUID id) {
         return users.stream().filter(u -> u.getId().equals(id)).findFirst();
     }
 }

@@ -1,7 +1,7 @@
-package pl.edu.pg.eti.kask.historyapi.model.user;
+package pl.edu.pg.eti.kask.historyapi.user.entity;
 
 import lombok.*;
-import pl.edu.pg.eti.kask.historyapi.model.note.Note;
+import pl.edu.pg.eti.kask.historyapi.note.Note;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -1,6 +1,20 @@
-GET http://localhost:9080/historyapi/api/users/367af1b4-7270-4044-83cb-766ecfc81510s
+GET http://localhost:9080/historyapi/api/users/98fa4728-3ac9-4c4d-b8f4-e2f54b5fd71e
 Accept: application/json
 
 ###
 GET  http://localhost:9080/historyapi/api/users
 
+###
+POST http://localhost:9080/historyapi/api/avatar/60743843-5608-465f-a358-59720e41db7a
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="avatar";
+Content-Type: image/jpeg
+
+< ./src/main/resources/avatars/1.jpg
+--boundary--
+
+
+###
+GET http://localhost:9080/historyapi/api/avatar/60743843-5608-465f-a358-59720e41db7a
