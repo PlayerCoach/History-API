@@ -1,16 +1,18 @@
 package pl.edu.pg.eti.kask.historyapi.user.repository;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import pl.edu.pg.eti.kask.historyapi.user.entity.User;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ApplicationScoped
 public class UserRepository {
 
 
-    private static final Map<UUID, User> users = new ConcurrentHashMap<>();
+    private final Map<UUID, User> users = new ConcurrentHashMap<>();
 
-    static {
+    public UserRepository() {
 
         User user1 = new User(UUID.fromString("fe003ce8-0dae-46cb-8d01-104d1d91d4a0"), "test", "test@test.test");
         users.put(user1.getId(), user1); // Predefined user with fixed UUID for testing purposes
@@ -26,12 +28,12 @@ public class UserRepository {
     }
 
 
-    public static List<User> findAll() {
+    public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
 
 
-    public static Optional<User> findById(UUID id) {
+    public Optional<User> findById(UUID id) {
         return Optional.ofNullable(users.get(id));
     }
 }

@@ -2,7 +2,7 @@ package pl.edu.pg.eti.kask.historyapi.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import pl.edu.pg.eti.kask.historyapi.note.Note;
+import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 
 import java.io.Serializable;
 import java.time.LocalDate;

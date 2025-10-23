@@ -1,5 +1,10 @@
 package pl.edu.pg.eti.kask.historyapi.user.avatar.repository;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,12 +12,24 @@ import java.nio.file.*;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
 public class AvatarRepository {
-    private final Path storageDirectory;
+    private  Path storageDirectory;
 
-    public AvatarRepository(String directoryPath) {
+    @Inject
+    private ServletContext servletContext;
+
+    public AvatarRepository() {}
+
+    @PostConstruct
+    private void init() {
+        String directoryPath = servletContext.getInitParameter("avatar.storage.dir");
+        if (directoryPath == null || directoryPath.isBlank()) {
+            throw new RuntimeException("Missing 'avatar.storage.dir' in web.xml");
+        }
+
         this.storageDirectory = Paths.get(directoryPath);
-        if(!Files.exists(storageDirectory)) {
+        if (!Files.exists(storageDirectory)) {
             try {
                 Files.createDirectories(storageDirectory);
             } catch (IOException e) {

@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.historyapi.user.avatar.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.user.avatar.repository.AvatarRepository;
 import pl.edu.pg.eti.kask.historyapi.user.repository.UserRepository;
 
@@ -12,17 +14,21 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
-
+@ApplicationScoped
 public class AvatarService {
-    private final AvatarRepository avatarRepository;
+    private AvatarRepository avatarRepository;
+    private  UserRepository userRepository;
 
-    public AvatarService(AvatarRepository avatarRepository) {
+    public AvatarService() {}
+    @Inject
+    public AvatarService(AvatarRepository avatarRepository, UserRepository userRepository) {
         this.avatarRepository = avatarRepository;
+        this.userRepository = userRepository;
     }
 
     public void save(UUID userId, String extension, InputStream data) throws IOException {
         // Business Rule: Check if the user actually exists.
-        if (UserRepository.findById(userId).isEmpty()) {
+        if (userRepository.findById(userId).isEmpty()) {
             throw new IllegalArgumentException("Cannot save avatar. User with ID " + userId + " not found.");
         }
 

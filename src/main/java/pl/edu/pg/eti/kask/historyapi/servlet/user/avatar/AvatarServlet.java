@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.servlet.user.avatar;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,19 +23,14 @@ import java.util.UUID;
 )
 public class AvatarServlet extends HttpServlet {
 
+    @Inject
     private AvatarService avatarService;
 
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png");
 
     @Override
     public void init() throws ServletException {
-        String dir = getServletContext().getInitParameter("avatar.storage.dir");
-        if (dir == null || dir.isBlank()) {
-            throw new ServletException("Parameter 'avatar.storage.dir' not configured in web.xml");
-        }
 
-        AvatarRepository avatarRepository = new AvatarRepository(dir);
-        this.avatarService = new AvatarService(avatarRepository);
     }
 
     @Override

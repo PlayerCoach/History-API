@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.historyapi.note;
+package pl.edu.pg.eti.kask.historyapi.note.entity;
 
 import java.io.Serializable;
 
