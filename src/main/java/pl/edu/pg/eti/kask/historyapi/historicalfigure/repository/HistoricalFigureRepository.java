@@ -41,4 +41,8 @@ public class HistoricalFigureRepository {
     public Optional<HistoricalFigure> findById(UUID id) {
         return Optional.ofNullable(figures.get(id));
     }
+
+    public void delete(UUID id) {
+        figures.remove(id);
+    }
 }

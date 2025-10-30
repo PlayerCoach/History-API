@@ -71,4 +71,21 @@ public class NoteRepository {
                 .filter(note -> note.getUserId().equals(userId))
                 .collect(Collectors.toList());
     }
+
+
+    public void delete(UUID id) {
+        notes.remove(id);
+    }
+
+    public void deleteNotesWithHistoricalFigureId(UUID historicalFigureId) {
+        notes.values().removeIf(note -> note.getHistoricalFigureId().equals(historicalFigureId));
+    }
+
+    public void save(Note note) {
+
+        note.setId(UUID.randomUUID());
+        notes.put(note.getId(), note);
+    }
+
+
 }

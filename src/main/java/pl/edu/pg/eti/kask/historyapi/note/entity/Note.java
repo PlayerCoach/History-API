@@ -21,6 +21,6 @@ public class Note implements Serializable {
     private String content; // Cannot be empty!
     private Mode mode; // PRIVATE or PUBLIC
 
-    private UUID historicalFigureId;; // Note about 1 historical figure
+    private UUID historicalFigureId; // Note about 1 historical figure
     private UUID userId; // Author of the note
 }

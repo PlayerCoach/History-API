@@ -32,4 +32,16 @@ public class NoteService {
     public List<Note> findByUserId(UUID userId) {
         return repository.findByUserId(userId);
     }
+
+    public void deleteNotesWithHistoricalFigureId(UUID historicalFigureId) {
+        repository.deleteNotesWithHistoricalFigureId(historicalFigureId);
+    }
+
+    public void delete(UUID id) {
+        repository.delete(id);
+    }
+
+    public void save(Note note) {
+        repository.save(note);
+    }
 }

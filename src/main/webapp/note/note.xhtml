@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="noteId" value="#{noteDetailView.noteId}" required="true" />
+    </f:metadata>
+
+    <ui:define name="title">
+        Detale notatki: #{noteDetailView.note.title}
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{noteDetailView.note == null}">
+            <h2>Notatka nie została znaleziona.</h2>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{noteDetailView.note != null}">
+            <h2>#{noteDetailView.note.title}</h2>
+            <hr/>
+
+            <dl class="row">
+                <dt class="col-sm-3">ID Notatki:</dt>
+                <dd class="col-sm-9">#{noteDetailView.note.id}</dd>
+
+                <dt class="col-sm-3">Autor:</dt>
+                <dd class="col-sm-9">#{noteDetailView.author.login}</dd>
+
+                <dt class="col-sm-3">Dotyczy Postaci:</dt>
+                <dd class="col-sm-9">#{noteDetailView.figure.name}</dd>
+
+                <dt class="col-sm-3">Tryb:</dt>
+                <dd class="col-sm-9">#{noteDetailView.note.mode}</dd>
+
+                <dt class="col-sm-3">Treść:</dt>
+                <dd class="col-sm-9"><pre style="white-space: pre-wrap;">#{noteDetailView.note.content}</pre></dd>
+            </dl>
+
+            <hr/>
+            <h:link outcome="/historicalfigure/figure" value="Wróć do postaci (#{noteDetailView.figure.name})"
+                    styleClass="btn btn-secondary">
+                <f:param name="figureId" value="#{noteDetailView.figure.id}" />
+            </h:link>
+
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

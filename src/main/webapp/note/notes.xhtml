@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <ui:define name="title">Wszystkie Notatki</ui:define>
+
+    <ui:define name="content">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Wszystkie Notatki</h2>
+
+            <h:link outcome="/note/note_edit" styleClass="btn btn-success">
+                <i class="fas fa-plus me-2"></i> Dodaj nową notatkę
+            </h:link>
+        </div>
+        <hr/>
+        <h:dataTable value="#{noteListView.notes}" var="note" styleClass="table table-striped">
+
+            <h:column>
+                <f:facet name="header">Tytuł Notatki</f:facet>
+                <h:link outcome="/note/note" value="#{note.title}">
+                    <f:param name="noteId" value="#{note.id}" />
+                </h:link>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Akcje</f:facet>
+                <h:link outcome="/note/note_edit" value="Edytuj" styleClass="btn btn-info btn-sm">
+                    <f:param name="noteId" value="#{note.id}" />
+                </h:link>
+            </h:column>
+        </h:dataTable>
+
+    </ui:define>
+</ui:composition>

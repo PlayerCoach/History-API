@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml"> <ui:define name="title">Postacie Historyczne (Kategorie)</ui:define>
+
+    <ui:define name="content">
+        <h2>Lista Postaci Historycznych</h2>
+        <hr/>
+
+        <h:form id="figureListForm">
+
+            <h:dataTable value="#{figureListView.figures}" var="fig" styleClass="table table-striped">
+
+                <h:column>
+                    <f:facet name="header">Nazwa Postaci</f:facet>
+                    #{fig.name}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Data Urodzenia</f:facet>
+                    #{fig.dateOfBrith}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Data Śmierci</f:facet>
+                    #{fig.dateOfDeath}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Akcje</f:facet>
+
+                    <h:link outcome="/historicalfigure/figure" value="Podgląd" styleClass="btn btn-primary btn-sm">
+                        <f:param name="figureId" value="#{fig.id}" />
+                    </h:link>
+
+                    <h:commandButton value="Usuń" action="#{figureListView.deleteFigure(fig.id)}"
+                                     styleClass="btn btn-danger btn-sm ms-2"
+                                     onclick="return confirm('Czy na pewno chcesz usunąć postać #{fig.name} i WSZYSTKIE jej notatki?');" />
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

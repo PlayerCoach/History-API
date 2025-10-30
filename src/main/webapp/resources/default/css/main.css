@@ -1,0 +1,7 @@
+.action-button {
+    display: inline-block;
+    width: auto; /* Adjust width as needed */
+    text-align: center;
+    padding: 8px 12px; /* Adjust padding as needed */
+    margin-left: 5px;
+}
