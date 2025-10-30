@@ -83,7 +83,7 @@ public class NoteRepository {
 
     public void save(Note note) {
 
-        note.setId(UUID.randomUUID());
+
         notes.put(note.getId(), note);
     }
 

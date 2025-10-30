@@ -18,49 +18,58 @@
         <h2>#{noteEditView.noteId == null ? 'Tworzenie nowej notatki' : 'Edycja notatki'}</h2>
         <hr/>
 
-        <h:form id="noteForm" styleClass="col-md-6">
+        <h:panelGroup rendered="#{noteEditView.note != null}">
+            <h:form id="noteForm" styleClass="col-md-6">
 
-            <div class="form-outline mb-4">
-                <h:inputText id="title" value="#{noteEditView.note.title}" styleClass="form-control"
-                             required="true"
-                             requiredMessage="Pole 'Tytuł' jest obowiązkowe." />
-                <h:outputLabel for="title" styleClass="form-label">Tytuł</h:outputLabel>
-                <h:message for="title" styleClass="text-danger" />
-            </div>
-
-            <div class="form-outline mb-4">
-                <h:inputTextarea id="content" value="#{noteEditView.note.content}" styleClass="form-control" rows="5"
+                <div class="form-outline mb-4">
+                    <h:inputText id="title" value="#{noteEditView.note.title}" styleClass="form-control"
                                  required="true"
-                                 requiredMessage="Treść notatki nie może być pusta." />
-                <h:outputLabel for="content" styleClass="form-label">Treść</h:outputLabel>
-                <h:message for="content" styleClass="text-danger" />
+                                 requiredMessage="Pole 'Tytuł' jest obowiązkowe." />
+                    <h:outputLabel for="title" styleClass="form-label">Tytuł</h:outputLabel>
+                    <h:message for="title" styleClass="text-danger" />
+                </div>
+
+                <div class="form-outline mb-4">
+                    <h:inputTextarea id="content" value="#{noteEditView.note.content}" styleClass="form-control" rows="5"
+                                     required="true"
+                                     requiredMessage="Treść notatki nie może być pusta." />
+                    <h:outputLabel for="content" styleClass="form-label">Treść</h:outputLabel>
+                    <h:message for="content" styleClass="text-danger" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="mode" class="form-label">Tryb</label>
+                    <h:selectOneMenu id="mode" value="#{noteEditView.note.mode}" styleClass="form-select">
+                        <f:selectItems value="#{noteEditView.modes}" var="m"
+                                       itemLabel="#{m.name()}" itemValue="#{m}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div class="mb-4">
+                    <label for="figureSelect" class="form-label">Postać Historyczna</label>
+                    <h:selectOneMenu id="figureSelect"
+                                     value="#{noteEditView.note.historicalFigureId}"
+                                     styleClass="form-select" required="true">
+                        <f:facet name="prompt">-- Wybierz postać --</f:facet>
+                        <f:selectItems value="#{noteEditView.availableFigures}"
+                                       var="fig"
+                                       itemLabel="#{fig.name}"
+                                       itemValue="#{fig.id}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <h:commandButton value="Zapisz" action="#{noteEditView.save}" styleClass="btn btn-primary" />
+
+                <h:link outcome="/note/notes" value="Anuluj" styleClass="btn btn-link" />
+
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{noteEditView.note == null and noteEditView.noteId != null}">
+            <div class="alert alert-danger" role="alert">
+                Notatka o podanym ID nie została znaleziona.
             </div>
+        </h:panelGroup>
 
-            <div class="mb-4">
-                <label for="mode" class="form-label">Tryb</label>
-                <h:selectOneMenu id="mode" value="#{noteEditView.note.mode}" styleClass="form-select">
-                    <f:selectItems value="#{noteEditView.modes}" var="m"
-                                   itemLabel="#{m.name()}" itemValue="#{m}" />
-                </h:selectOneMenu>
-            </div>
-
-            <div class="mb-4">
-                <label for="figureSelect" class="form-label">Postać Historyczna</label>
-                <h:selectOneMenu id="figureSelect"
-                                 value="#{noteEditView.note.historicalFigureId}"
-                                 styleClass="form-select" required="true">
-                    <f:facet name="prompt">-- Wybierz postać --</f:facet>
-                    <f:selectItems value="#{noteEditView.availableFigures}"
-                                   var="fig"
-                                   itemLabel="#{fig.name}"
-                                   itemValue="#{fig.id}" />
-                </h:selectOneMenu>
-            </div>
-
-            <h:commandButton value="Zapisz" action="#{noteEditView.save}" styleClass="btn btn-primary" />
-
-            <h:link outcome="/note/notes" value="Anuluj" styleClass="btn btn-link" />
-
-        </h:form>
     </ui:define>
 </ui:composition>
