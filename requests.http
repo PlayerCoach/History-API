@@ -1,78 +1,166 @@
 ### ===============================================================
-### User API Tests
+### Lab 4: Testy JAX-RS
+### Serwer: http://localhost:9080/historyapi/api
 ### ===============================================================
 
 ###
-# [SUCCESS] Request a single, specific user by their ID.
-# Uses the predefined static UUID for the "test" user.
-GET http://localhost:9080/historyapi/api/users/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
-Accept: application/json
+# UUID Napoleona (Kategoria 1)
+@figureIdNapoleon = 15a7f9a0-7ac1-11eb-8000-0242ac110002
+# UUID Notatki Napoleona (Element 1)
+@noteIdNapoleon = 25b8c1f0-7ac1-11eb-8000-0242ac110002
 
 ###
-# [SUCCESS] Request the list of all users.
-GET http://localhost:9080/historyapi/api/users/
-Accept: application/json
+# UUID Marii Curie (Kategoria 2)
+@figureIdCurie = 15a7fae0-7ac1-11eb-8001-0242ac110002
+# UUID Notatki Marii Curie (Element 2)
+@noteIdCurie = 25b8c3a0-7ac1-11eb-8001-0242ac110002
 
-###
-# [FAILURE] Request a user with a non-existent UUID.
-# This should return a 404 Not Found error.
-GET http://localhost:9080/historyapi/api/users/11111111-1111-1111-1111-111111111111
-Accept: application/json
-
+# UUID nieistniejącego zasobu
+@uuidNotFound = 11111111-1111-1111-1111-111111111111
 
 ### ===============================================================
-### Avatar API Lifecycle Tests
+### Punkt 1: Kontroler Kategorii (HistoricalFigure)
+### Ścieżka: /api/figures
 ### ===============================================================
 
 ###
-# 1. [CREATE] Upload an initial avatar for the test user.
-# This should return a 201 Created status.
-POST http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
-Content-Type: multipart/form-data; boundary=boundary
-
---boundary
-Content-Disposition: form-data; name="avatar"; filename="avatar.jpg"
-Content-Type: image/jpeg
-
-< ./src/main/resources/avatars/2.jpg
---boundary--
+# [Pobieranie] GET /api/figures
+# Powinno zwrócić listę wszystkich postaci (200 OK)
+GET http://localhost:9080/historyapi/api/figures/
+Accept: application/json
 
 ###
-# 2. [VERIFY CREATE] Retrieve the newly uploaded avatar.
-# This should return the image with a 200 OK status.
-GET http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+# [Pobieranie 1] GET /api/figures/{id}
+# Powinno zwrócić jedną postać (200 OK)
+GET http://localhost:9080/historyapi/api/figures/{{figureIdNapoleon}}
+Accept: application/json
 
 ###
-# 3. [UPDATE] Upload a new avatar for the same user to test overwriting.
-# We'll use a different file to confirm the update works.
-# This should also return a 201 Created status.
-POST http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
-Content-Type: multipart/form-data; boundary=boundary
-
---boundary
-Content-Disposition: form-data; name="avatar"; filename="new_avatar.png"
-Content-Type: image/png
-
-# Make sure you have another image file available for this test
-< ./src/main/resources/avatars/1.jpg
---boundary--
+# [Pobieranie 1 - BŁĄD] GET /api/figures/{id}
+# Powinno zwrócić 404 Not Found
+GET http://localhost:9080/historyapi/api/figures/{{uuidNotFound}}
+Accept: application/json
 
 ###
-# 4. [VERIFY UPDATE] Retrieve the avatar again to ensure it has been replaced.
-# You should see the new image.
-GET http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+# [Tworzenie] POST /api/figures
+# Tworzy nową postać (np. Kopernik)
+# Powinno zwrócić 201 Created
+POST http://localhost:9080/historyapi/api/figures/
+Content-Type: application/json
+
+{
+  "name": "Mikołaj Kopernik",
+  "dateOfBrith": "1473-02-19",
+  "dateOfDeath": "1543-05-24"
+}
 
 ###
-# 5. [DELETE] Delete the user's avatar.
-# This should return a 200 OK status.
-DELETE http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+# [Modyfikacja] PUT /api/figures/{id}
+# Modyfikuje istniejącą postać (Napoleon)
+# Powinno zwrócić 200 OK
+PUT http://localhost:9080/historyapi/api/figures/{{figureIdNapoleon}}
+Content-Type: application/json
+
+{
+  "name": "Napoleon Bonaparte ZMODYFIKOWANY",
+  "dateOfBrith": "1769-08-15",
+  "dateOfDeath": "1821-05-05"
+}
 
 ###
-# 6. [VERIFY DELETE] Attempt to retrieve the deleted avatar.
-# This should now fail with a 404 Not Found error.
-GET http://localhost:9080/historyapi/api/avatars/fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+# [Usuwanie] DELETE /api/figures/{id}
+# Usuwa postać ORAZ jej notatki (dzięki logice serwisu)
+# Powinno zwrócić 204 No Content
+DELETE http://localhost:9080/historyapi/api/figures/{{figureIdNapoleon}}
+
+### ===============================================================
+### Punkt 2: Kontroler Elementów (Note) - HIERARCHICZNIE
+### Ścieżka: /api/figures/{figureId}/notes
+### ===============================================================
 
 ###
-# [FAILURE] Attempt to get an avatar for a user that does not exist.
-# This should also fail with a 404 Not Found error.
-GET http://localhost:9080/historyapi/api/avatars/11111111-1111-1111-1111-111111111111
+# [Pobieranie listy] GET /api/figures/{figureId}/notes
+# Pobiera wszystkie notatki dla danej postaci (Marii Curie)
+GET http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes
+Accept: application/json
+
+###
+# [Pobieranie listy - Pusta] GET /api/figures/{figureId}/notes
+# Pobiera notatki dla postaci, która ich nie ma (zakładając, że Napoleon usunięty)
+# Powinno zwrócić 200 OK i pustą listę []
+GET http://localhost:9080/historyapi/api/figures/{{figureIdNapoleon}}/notes
+Accept: application/json
+
+###
+# [Pobieranie 1] GET /api/figures/{figureId}/notes/{noteId}
+# Pobiera jedną, konkretną notatkę
+GET http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes/{{noteIdCurie}}
+Accept: application/json
+
+###
+# [Pobieranie 1 - BŁĄD] GET /api/figures/{figureId}/notes/{noteId}
+# Błąd 404 dla nieistniejącej notatki
+GET http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes/{{uuidNotFound}}
+Accept: application/json
+
+###
+# [Tworzenie] POST /api/figures/{figureId}/notes
+# Tworzy nową notatkę dla Marii Curie.
+# ID postaci (figureId) jest brane z URL-a, a NIE z JSON-a.
+# Powinno zwrócić 201 Created
+POST http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes
+Content-Type: application/json
+
+{
+  "title": "Nowa notatka o Radzie",
+  "content": "Odkryła rad i polon.",
+  "mode": "PUBLIC"
+}
+
+###
+# [Modyfikacja] PUT /api/figures/{figureId}/notes/{noteId}
+# Modyfikuje istniejącą notatkę
+# Powinno zwrócić 200 OK
+PUT http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes/{{noteIdCurie}}
+Content-Type: application/json
+
+{
+  "title": "ZMODYFIKOWANA Notatka o Marii",
+  "content": "Zupełnie nowa treść.",
+  "mode": "PRIVATE"
+}
+
+###
+# [Usuwanie] DELETE /api/figures/{figureId}/notes/{noteId}
+# Usuwa jedną notatkę (metoda hierarchiczna)
+# Powinno zwrócić 204 No Content
+DELETE http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes/{{noteIdCurie}}
+
+### ===============================================================
+### DODATKOWE: Płaskie API dla Notatek
+### Ścieżka: /api/notes
+### ===============================================================
+
+###
+# [Płaskie Pobieranie] GET /api/notes
+# Pobiera WSZYSTKIE notatki ze wszystkich postaci
+GET http://localhost:9080/historyapi/api/notes/
+Accept: application/json
+
+###
+# [Płaskie Pobieranie 1] GET /api/notes/{id}
+# Pobiera jedną notatkę po jej globalnym ID (Marii Curie)
+GET http://localhost:9080/historyapi/api/notes/{{noteIdCurie}}
+Accept: application/json
+
+###
+# [Płaskie Pobieranie 1 - BŁĄD] GET /api/notes/{id}
+# Błąd 404 dla nieistniejącej notatki
+GET http://localhost:9080/historyapi/api/notes/{{uuidNotFound}}
+Accept: application/json
+
+###
+# [Płaskie Usuwanie] DELETE /api/notes/{id}
+# Usuwa jedną notatkę po jej globalnym ID (zakładając, że poprzedni delete nie zadziałał)
+# Powinno zwrócić 204 No Content
+DELETE http://localhost:9080/historyapi/api/notes/{{noteIdCurie}}

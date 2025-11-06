@@ -54,7 +54,6 @@ public class NoteEditView implements Serializable {
 
             note = new Note();
             note.setMode(Mode.PUBLIC);
-            note.setId(UUID.randomUUID());
             UUID testUserId = UUID.fromString("fe003ce8-0dae-46cb-8d01-104d1d91d4a0");
             note.setUserId(testUserId);
 

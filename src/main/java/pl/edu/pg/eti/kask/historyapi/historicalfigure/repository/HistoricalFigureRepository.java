@@ -45,4 +45,8 @@ public class HistoricalFigureRepository {
     public void delete(UUID id) {
         figures.remove(id);
     }
+
+    public void save(HistoricalFigure historicalFigure) {
+        figures.put(historicalFigure.getId(), historicalFigure);
+    }
 }

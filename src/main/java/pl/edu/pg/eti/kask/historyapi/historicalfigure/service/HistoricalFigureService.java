@@ -39,4 +39,8 @@ public class HistoricalFigureService {
         // Then, delete the historical figure itself
         repository.delete(id);
     }
+
+    public void save(HistoricalFigure historicalFigure) {
+        repository.save(historicalFigure);
+    }
 }

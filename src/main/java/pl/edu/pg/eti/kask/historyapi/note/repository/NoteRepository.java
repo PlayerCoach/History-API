@@ -83,7 +83,9 @@ public class NoteRepository {
 
     public void save(Note note) {
 
-
+        if(note.getId() == null) {
+            note.setId(UUID.randomUUID());
+        }
         notes.put(note.getId(), note);
     }
 
