@@ -48,13 +48,14 @@
                 <div class="mb-4">
                     <label for="figureSelect" class="form-label">Postać Historyczna</label>
                     <h:selectOneMenu id="figureSelect"
-                                     value="#{noteEditView.note.historicalFigureId}"
-                                     styleClass="form-select" required="true">
+                                     value="#{noteEditView.note.historicalFigure}"
+                                     styleClass="form-select" required="true"
+                                     converter="historicalFigureConverter">
                         <f:facet name="prompt">-- Wybierz postać --</f:facet>
                         <f:selectItems value="#{noteEditView.availableFigures}"
                                        var="fig"
                                        itemLabel="#{fig.name}"
-                                       itemValue="#{fig.id}" />
+                                       itemValue="#{fig}" />
                     </h:selectOneMenu>
                 </div>
 

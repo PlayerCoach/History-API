@@ -7,5 +7,17 @@
         <feature>cdi-4.0</feature>
         <feature>faces-4.0</feature>
         <feature>restfulWS-3.1</feature>
+        <feature>persistence-3.1</feature>
+        <feature>jdbc-4.3</feature>
+        <feature>enterpriseBeansLite-4.0</feature>
     </featureManager>
+
+    <dataSource id="H2DataSource" jndiName="jdbc/historyDS">
+        <jdbcDriver libraryRef="h2Lib"/>
+        <properties url="jdbc:h2:mem:historydb" user="sa" password=""/>
+    </dataSource>
+
+    <library id="h2Lib">
+        <fileset dir="${shared.resource.dir}/h2" includes="*.jar"/>
+    </library>
 </server>

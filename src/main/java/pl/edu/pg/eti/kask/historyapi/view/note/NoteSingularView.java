@@ -53,8 +53,8 @@ public class NoteSingularView implements Serializable {
     }
 
     public HistoricalFigure getFigure() {
-        if (figure == null && getNote() != null) {
-            figure = figureService.findById(getNote().getHistoricalFigureId()).orElse(null);
+        if (figure == null && getNote() != null && getNote().getHistoricalFigure() != null) {
+            figure = getNote().getHistoricalFigure();
         }
         return figure;
     }

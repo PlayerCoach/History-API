@@ -40,6 +40,7 @@ public class HistoricalFigureService {
         repository.delete(id);
     }
 
+    @Transactional
     public void save(HistoricalFigure historicalFigure) {
         repository.save(historicalFigure);
     }

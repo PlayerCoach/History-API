@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.historyapi.note.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.repository.NoteRepository;
 
@@ -33,14 +34,17 @@ public class NoteService {
         return repository.findByUserId(userId);
     }
 
+    @Transactional
     public void deleteNotesWithHistoricalFigureId(UUID historicalFigureId) {
         repository.deleteNotesWithHistoricalFigureId(historicalFigureId);
     }
 
+    @Transactional
     public void delete(UUID id) {
         repository.delete(id);
     }
 
+    @Transactional
     public void save(Note note) {
         repository.save(note);
     }

@@ -5,6 +5,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
+import pl.edu.pg.eti.kask.historyapi.historicalfigure.service.HistoricalFigureService;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.service.NoteService;
 
@@ -19,24 +21,34 @@ public class NoteController {
 
     @Inject
     private NoteService noteService;
+
+    @Inject
+    private HistoricalFigureService figureService;
+
     @GET
     @Path("/figures/{figureId}/notes")
     public List<Note> getNotesForFigure(@PathParam("figureId") UUID figureId) {
         return noteService.findByFigureId(figureId);
     }
+
     @GET
     @Path("/figures/{figureId}/notes/{noteId}")
     public Response getNoteById(@PathParam("figureId") UUID figureId,
                                 @PathParam("noteId") UUID noteId) {
         return noteService.findById(noteId)
-                .filter(note -> note.getHistoricalFigureId().equals(figureId))
+                .filter(note -> note.getHistoricalFigure() != null &&
+                               note.getHistoricalFigure().getId().equals(figureId))
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
+
     @POST
     @Path("/figures/{figureId}/notes")
     public Response createNoteForFigure(@PathParam("figureId") UUID figureId, Note note) {
-        note.setHistoricalFigureId(figureId);
+        HistoricalFigure figure = figureService.findById(figureId)
+                .orElseThrow(() -> new NotFoundException("Historical figure not found"));
+
+        note.setHistoricalFigure(figure);
         note.setId(UUID.randomUUID());
 
         noteService.save(note);
@@ -51,9 +63,11 @@ public class NoteController {
     public Response updateNote(@PathParam("figureId") UUID figureId,
                                @PathParam("noteId") UUID noteId,
                                Note note) {
+        HistoricalFigure figure = figureService.findById(figureId)
+                .orElseThrow(() -> new NotFoundException("Historical figure not found"));
 
         note.setId(noteId);
-        note.setHistoricalFigureId(figureId);
+        note.setHistoricalFigure(figure);
         noteService.save(note);
         return Response.ok(note).build(); // 200
     }
@@ -71,7 +85,6 @@ public class NoteController {
         return noteService.findAll();
     }
 
-
     @GET
     @Path("/notes/{id}")
     public Response getFlatNoteById(@PathParam("id") UUID noteId) {
@@ -79,6 +92,7 @@ public class NoteController {
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
+
     @DELETE
     @Path("/notes/{id}")
     public Response deleteFlatNote(@PathParam("id") UUID noteId) {

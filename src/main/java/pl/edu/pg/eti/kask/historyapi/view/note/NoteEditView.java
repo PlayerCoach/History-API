@@ -58,7 +58,8 @@ public class NoteEditView implements Serializable {
             note.setUserId(testUserId);
 
             if (figureId != null) {
-                note.setHistoricalFigureId(figureId);
+                HistoricalFigure figure = figureService.findById(figureId).orElse(null);
+                note.setHistoricalFigure(figure);
             }
         }
     }
@@ -72,8 +73,8 @@ public class NoteEditView implements Serializable {
 
     public String save() {
         noteService.save(note);
-
-        return "/historicalfigure/figure?faces-redirect=true&figureId=" + note.getHistoricalFigureId();
+        UUID figureIdForRedirect = (note.getHistoricalFigure() != null) ? note.getHistoricalFigure().getId() : null;
+        return "/historicalfigure/figure?faces-redirect=true&figureId=" + figureIdForRedirect;
     }
 
     public Mode[] getModes() {
