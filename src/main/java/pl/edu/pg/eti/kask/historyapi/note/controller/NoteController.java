@@ -5,13 +5,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.service.HistoricalFigureService;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.service.NoteService;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @Path("/figures/{figureId}/notes")
@@ -48,31 +46,31 @@ public class NoteController {
     @POST
     @Path("/")
     public Response createNoteForFigure(@PathParam("figureId") UUID figureId, Note note) {
-        HistoricalFigure figure = figureService.findById(figureId)
-                .orElseThrow(() -> new NotFoundException("Historical figure not found"));
-
-        note.setHistoricalFigure(figure);
-        note.setId(UUID.randomUUID());
-
-        noteService.save(note);
-
-        URI location = UriBuilder.fromPath("/figures/{figureId}/notes/{noteId}")
-                .build(figureId, note.getId());
-        return Response.created(location).build(); // 201
+        return figureService.findById(figureId)
+                .map(figure -> {
+                    note.setHistoricalFigure(figure);
+                    note.setId(UUID.randomUUID());
+                    noteService.save(note);
+                    URI location = UriBuilder.fromPath("/figures/{figureId}/notes/{noteId}")
+                            .build(figureId, note.getId());
+                    return Response.created(location).build();
+                })
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
     @PUT
-    @Path("S/{noteId}")
+    @Path("/{noteId}")
     public Response updateNote(@PathParam("figureId") UUID figureId,
                                @PathParam("noteId") UUID noteId,
                                Note note) {
-        HistoricalFigure figure = figureService.findById(figureId)
-                .orElseThrow(() -> new NotFoundException("Historical figure not found"));
-
-        note.setId(noteId);
-        note.setHistoricalFigure(figure);
-        noteService.save(note);
-        return Response.ok(note).build(); // 200
+        return figureService.findById(figureId)
+                .map(figure -> {
+                    note.setId(noteId);
+                    note.setHistoricalFigure(figure);
+                    noteService.save(note);
+                    return Response.ok(note).build();
+                })
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
     @DELETE
