@@ -11,11 +11,16 @@
         <class>pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure</class>
         <class>pl.edu.pg.eti.kask.historyapi.note.entity.Note</class>
 
+        <shared-cache-mode>NONE</shared-cache-mode>
+
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
-            <property name="eclipselink.logging.parameters" value="true"/>
+            <!-- Wyłączenie cache L2 - zapobiega problemom z odświeżaniem danych -->
+            <property name="eclipselink.cache.shared.default" value="false"/>
+
+            <!-- Automatyczne odświeżanie encji po operacjach -->
+            <property name="eclipselink.refresh" value="true"/>
         </properties>
     </persistence-unit>
 

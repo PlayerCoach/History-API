@@ -6,7 +6,7 @@ import jakarta.ws.rs.core.Application;
 /**
  * Global config for JAX-RS REST services prefix.
  */
-@ApplicationPath("/api")//Can be overwritten in web.xml using servlet configuration.
+@ApplicationPath("/api")
 public class ApplicationConfig extends Application {
 }
 

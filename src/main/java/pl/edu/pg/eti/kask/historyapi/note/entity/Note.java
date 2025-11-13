@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.historyapi.note.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
@@ -32,6 +33,7 @@ public class Note implements Serializable {
     private Mode mode;
 
     @JsonIgnore
+    @JsonbTransient
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "historical_figure_id")
     private HistoricalFigure historicalFigure;

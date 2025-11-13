@@ -136,31 +136,31 @@ Content-Type: application/json
 # Powinno zwrócić 204 No Content
 DELETE http://localhost:9080/historyapi/api/figures/{{figureIdCurie}}/notes/{{noteIdCurie}}
 
+
+
 ### ===============================================================
-### DODATKOWE: Płaskie API dla Notatek
+### Punkt 3: Kontroler Elementów (Note) - BEZ HIERARCH
 ### Ścieżka: /api/notes
 ### ===============================================================
-
 ###
-# [Płaskie Pobieranie] GET /api/notes
-# Pobiera WSZYSTKIE notatki ze wszystkich postaci
-GET http://localhost:9080/historyapi/api/notes/
-Accept: application/json
-
-###
-# [Płaskie Pobieranie 1] GET /api/notes/{id}
-# Pobiera jedną notatkę po jej globalnym ID (Marii Curie)
+# [Pobieranie] GET /api/notes/{noteId}
+# Pobiera jedną, konkretną notatkę (ta sama co wcześniej usuni
+# ta hierarchicznie, ale teraz bez hierarchii)
 GET http://localhost:9080/historyapi/api/notes/{{noteIdCurie}}
 Accept: application/json
-
 ###
-# [Płaskie Pobieranie 1 - BŁĄD] GET /api/notes/{id}
+# [Pobieranie - BŁĄD] GET /api/notes/{note
 # Błąd 404 dla nieistniejącej notatki
 GET http://localhost:9080/historyapi/api/notes/{{uuidNotFound}}
 Accept: application/json
-
 ###
-# [Płaskie Usuwanie] DELETE /api/notes/{id}
-# Usuwa jedną notatkę po jej globalnym ID (zakładając, że poprzedni delete nie zadziałał)
+### wszystkie notatki (bez hierarchii)
+# [Pobieranie listy] GET /api/notes
+# Pobiera wszystkie notatki
+GET http://localhost:9080/historyapi/api/notes
+Accept: application/json
+###
+# [Usuwanie] DELETE /api/notes/{noteId}
+# Usuwa jedną notatkę (metoda bez hierarchii)
 # Powinno zwrócić 204 No Content
 DELETE http://localhost:9080/historyapi/api/notes/{{noteIdCurie}}

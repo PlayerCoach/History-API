@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.historyapi.historicalfigure.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
@@ -34,6 +35,7 @@ public class HistoricalFigure implements Serializable {
     private LocalDate dateOfDeath;
 
     @JsonIgnore
+    @JsonbTransient
     @OneToMany(mappedBy = "historicalFigure", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Note> notes = new ArrayList<>();
 

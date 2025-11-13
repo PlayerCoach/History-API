@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@Path("")
+@Path("/figures/{figureId}/notes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class NoteController {
@@ -26,13 +26,16 @@ public class NoteController {
     private HistoricalFigureService figureService;
 
     @GET
-    @Path("/figures/{figureId}/notes")
-    public List<Note> getNotesForFigure(@PathParam("figureId") UUID figureId) {
-        return noteService.findByFigureId(figureId);
+    @Path("/")
+    public Response getNotesForFigure(@PathParam("figureId") UUID figureId) {
+        if(noteService.findByFigureId(figureId).isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(noteService.findByFigureId(figureId)).build();
     }
 
     @GET
-    @Path("/figures/{figureId}/notes/{noteId}")
+    @Path("/{noteId}")
     public Response getNoteById(@PathParam("figureId") UUID figureId,
                                 @PathParam("noteId") UUID noteId) {
         return noteService.findById(noteId)
@@ -43,7 +46,7 @@ public class NoteController {
     }
 
     @POST
-    @Path("/figures/{figureId}/notes")
+    @Path("/")
     public Response createNoteForFigure(@PathParam("figureId") UUID figureId, Note note) {
         HistoricalFigure figure = figureService.findById(figureId)
                 .orElseThrow(() -> new NotFoundException("Historical figure not found"));
@@ -59,7 +62,7 @@ public class NoteController {
     }
 
     @PUT
-    @Path("/figures/{figureId}/notes/{noteId}")
+    @Path("S/{noteId}")
     public Response updateNote(@PathParam("figureId") UUID figureId,
                                @PathParam("noteId") UUID noteId,
                                Note note) {
@@ -73,29 +76,8 @@ public class NoteController {
     }
 
     @DELETE
-    @Path("/figures/{figureId}/notes/{noteId}")
+    @Path("/{noteId}")
     public Response deleteHierarchicalNote(@PathParam("noteId") UUID noteId) {
-        noteService.delete(noteId);
-        return Response.noContent().build(); // 204
-    }
-
-    @GET
-    @Path("/notes")
-    public List<Note> getAllNotes() {
-        return noteService.findAll();
-    }
-
-    @GET
-    @Path("/notes/{id}")
-    public Response getFlatNoteById(@PathParam("id") UUID noteId) {
-        return noteService.findById(noteId)
-                .map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND)).build();
-    }
-
-    @DELETE
-    @Path("/notes/{id}")
-    public Response deleteFlatNote(@PathParam("id") UUID noteId) {
         noteService.delete(noteId);
         return Response.noContent().build(); // 204
     }

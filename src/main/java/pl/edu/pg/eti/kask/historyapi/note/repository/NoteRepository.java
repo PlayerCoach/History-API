@@ -54,8 +54,12 @@ public class NoteRepository {
             note.setId(UUID.randomUUID());
         }
 
-        if (em.find(Note.class, note.getId()) == null) {
+        Note existing = em.find(Note.class, note.getId());
+        if (existing == null) {
             em.persist(note);
+            if (note.getHistoricalFigure() != null && !note.getHistoricalFigure().getNotes().contains(note)) {
+                note.getHistoricalFigure().getNotes().add(note);
+            }
         } else {
             em.merge(note);
         }

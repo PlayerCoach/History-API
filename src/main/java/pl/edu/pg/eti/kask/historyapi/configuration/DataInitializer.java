@@ -1,8 +1,8 @@
 package pl.edu.pg.eti.kask.historyapi.configuration;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.service.HistoricalFigureService;
@@ -13,8 +13,7 @@ import pl.edu.pg.eti.kask.historyapi.note.service.NoteService;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Singleton
-@Startup
+@ApplicationScoped
 public class DataInitializer {
 
     @Inject
@@ -23,8 +22,7 @@ public class DataInitializer {
     @Inject
     private NoteService noteService;
 
-    @PostConstruct
-    private void init() {
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
         // Create Historical Figures
         HistoricalFigure napoleon = new HistoricalFigure();
         napoleon.setId(UUID.fromString("15a7f9a0-7ac1-11eb-8000-0242ac110002"));
@@ -53,7 +51,7 @@ public class DataInitializer {
         n1.setUserId(testUserId);
 
         Note n2 = new Note();
-        n2.setId(UUID.randomUUID());
+        n2.setId(UUID.fromString("25b8c3a0-7ac1-11eb-8001-0242ac110002"));
         n2.setTitle("Odkrycie Polonu");
         n2.setContent("Pierwiastek nazwany na cześć Polski.");
         n2.setMode(Mode.PUBLIC);

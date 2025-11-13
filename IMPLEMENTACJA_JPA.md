@@ -7,8 +7,10 @@
 ✅ **Utworzono plik persistence.xml** (`src/main/resources/META-INF/persistence.xml`)
 - Skonfigurowana jednostka trwałości `historyPU` z typem transakcji JTA
 - Połączenie z bazą danych poprzez JNDI: `jdbc/historyDS`
-- Hibernate skonfigurowany do automatycznego tworzenia schematu (`create-drop`)
+- EclipseLink skonfigurowany do automatycznego tworzenia schematu (`drop-and-create`)
 - Zarejestrowane klasy encyjne: `HistoricalFigure` i `Note`
+- **Wyłączony cache L2** (`shared-cache-mode="NONE"`) - zapobiega problemom z odświeżaniem danych
+- **Automatyczne odświeżanie encji** (`eclipselink.refresh="true"`) - zawsze aktualne dane po commit
 
 ✅ **Skonfigurowano DataSource w server.xml**
 - Dodano feature: `persistence-3.1`, `jdbc-4.3`, `enterpriseBeansLite-4.0`
@@ -64,13 +66,15 @@
   - `deleteNotesWithHistoricalFigureId()` - JPQL DELETE
   - `save()` - `em.persist()` lub `em.merge()`
 
-✅ **Dodano @Transactional do serwisów**:
+✅ **Dodano @Transactional (CDI) do serwisów**:
 - `HistoricalFigureService`: metody `save()` i `delete()`
 - `NoteService`: metody `save()`, `delete()`, `deleteNotesWithHistoricalFigureId()`
+- Używa `jakarta.transaction.Transactional` (CDI), **nie** EJB
 
-✅ **Utworzono DataInitializer**:
-- Komponent `@Singleton @Startup` do inicjalizacji danych
-- Automatyczne tworzenie przykładowych danych przy starcie aplikacji
+✅ **Utworzono DataInitializer (CDI)**:
+- Komponent `@ApplicationScoped` z obserwatorem `@Observes @Initialized(ApplicationScoped.class)`
+- Automatyczne tworzenie przykładowych danych przy starcie aplikacji (CDI event)
+- **Zmieniono z EJB `@Singleton @Startup` na CDI** - lepsze zarządzanie cyklem życia
 - Zastępuje poprzednie metody `@PostConstruct` w repozytoriach
 
 ### 4. Aktualizacja kontrolerów i widoków
@@ -188,7 +192,10 @@ Naciśnij `Ctrl+C` lub wpisz `q` i Enter w terminalu.
 ## Uwagi
 
 - Baza H2 jest w pamięci (`memory:historydb`), więc dane są tracone po restarcie serwera
-- Hibernate używa strategii `create-drop`, czyli schemat jest tworzony przy starcie i usuwany przy zatrzymaniu
+- EclipseLink używa strategii `drop-and-create`, czyli schemat jest tworzony przy starcie i usuwany przy zatrzymaniu
+- **Cache L2 jest wyłączony** (`shared-cache-mode="NONE"`) - eliminuje problemy z nieaktualnymi danymi
+- **Auto-refresh włączony** (`eclipselink.refresh="true"`) - encje są zawsze odświeżane po commit
 - Związek User → Note został zachowany jako UUID (zgodnie z instrukcją: "pomijane są powiązania elementu z użytkownikiem")
 - Wszystkie dotychczasowe funkcjonalności (JSF i JAX-RS) działają poprawnie
+- **Używa CDI (`@ApplicationScoped`, `@Transactional`)**, nie EJB - zgodne z nowoczesnymi praktykami Jakarta EE
 
