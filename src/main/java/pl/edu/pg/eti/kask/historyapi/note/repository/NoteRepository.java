@@ -30,11 +30,6 @@ public class NoteRepository {
                 .getResultList();
     }
 
-    public List<Note> findByUserId(UUID userId) {
-        return em.createQuery("SELECT n FROM Note n WHERE n.userId = :userId", Note.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
 
     public void delete(UUID id) {
         Note note = em.find(Note.class, id);

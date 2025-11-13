@@ -45,13 +45,6 @@ public class NoteSingularView implements Serializable {
     }
 
 
-    public User getAuthor() {
-        if (author == null && getNote() != null) {
-            author = userService.findById(getNote().getUserId()).orElse(null);
-        }
-        return author;
-    }
-
     public HistoricalFigure getFigure() {
         if (figure == null && getNote() != null && getNote().getHistoricalFigure() != null) {
             figure = getNote().getHistoricalFigure();

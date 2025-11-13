@@ -40,15 +40,12 @@ public class DataInitializer {
         figureService.save(curie);
 
         // Create Notes
-        UUID testUserId = UUID.fromString("fe003ce8-0dae-46cb-8d01-104d1d91d4a0");
-
         Note n1 = new Note();
         n1.setId(UUID.fromString("25b8c1f0-7ac1-11eb-8000-0242ac110002"));
         n1.setTitle("Bitwa pod Waterloo");
         n1.setContent("Ostateczna porażka Napoleona.");
         n1.setMode(Mode.PUBLIC);
         n1.setHistoricalFigure(napoleon);
-        n1.setUserId(testUserId);
 
         Note n2 = new Note();
         n2.setId(UUID.fromString("25b8c3a0-7ac1-11eb-8001-0242ac110002"));
@@ -56,7 +53,6 @@ public class DataInitializer {
         n2.setContent("Pierwiastek nazwany na cześć Polski.");
         n2.setMode(Mode.PUBLIC);
         n2.setHistoricalFigure(curie);
-        n2.setUserId(testUserId);
 
         Note n3 = new Note();
         n3.setId(UUID.randomUUID());
@@ -64,7 +60,6 @@ public class DataInitializer {
         n3.setContent("Kolejne wielkie odkrycie.");
         n3.setMode(Mode.PRIVATE);
         n3.setHistoricalFigure(curie);
-        n3.setUserId(testUserId);
 
         noteService.save(n1);
         noteService.save(n2);

@@ -30,9 +30,6 @@ public class NoteService {
         return repository.findByFigureId(figureId);
     }
 
-    public List<Note> findByUserId(UUID userId) {
-        return repository.findByUserId(userId);
-    }
 
     @Transactional
     public void deleteNotesWithHistoricalFigureId(UUID historicalFigureId) {
