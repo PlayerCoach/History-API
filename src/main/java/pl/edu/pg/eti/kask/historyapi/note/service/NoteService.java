@@ -2,8 +2,10 @@ package pl.edu.pg.eti.kask.historyapi.note.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.repository.NoteRepository;
+import pl.edu.pg.eti.kask.historyapi.user.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,13 @@ public class NoteService {
     }
 
     public void save(Note note) {
+        repository.save(note);
+    }
+
+    public void createNote(Note note, HistoricalFigure figure, User owner) {
+        note.setId(UUID.randomUUID());
+        note.setHistoricalFigure(figure);
+        note.setCreatedBy(owner);
         repository.save(note);
     }
 }

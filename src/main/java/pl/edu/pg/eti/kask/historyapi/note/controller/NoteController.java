@@ -80,10 +80,7 @@ public class NoteController {
         return figureService.findById(figureId)
                 .flatMap(figure -> userService.findByLogin(username)
                     .map(user -> {
-                        note.setHistoricalFigure(figure);
-                        note.setId(UUID.randomUUID());
-                        note.setCreatedBy(user);
-                        noteService.save(note);
+                        noteService.createNote(note, figure, user);
                         URI location = UriBuilder.fromPath("/figures/{figureId}/notes/{noteId}")
                                 .build(figureId, note.getId());
                         return Response.created(location).build();
