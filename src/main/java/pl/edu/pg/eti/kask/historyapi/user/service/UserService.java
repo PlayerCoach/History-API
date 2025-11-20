@@ -1,6 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.user.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.user.entity.User;
 import pl.edu.pg.eti.kask.historyapi.user.repository.UserRepository;
@@ -9,20 +9,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Stateless
 public class UserService {
 
     private UserRepository repository;
 
-
     public UserService() {}
+
     @Inject
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
-
-    public  List<User> findAll() {
+    public List<User> findAll() {
         return repository.findAll();
     }
 
@@ -30,5 +29,15 @@ public class UserService {
         return repository.findById(id);
     }
 
+    public Optional<User> findByLogin(String login) {
+        return repository.findByLogin(login);
+    }
 
+    public void save(User user) {
+        repository.save(user);
+    }
+
+    public void delete(UUID id) {
+        repository.delete(id);
+    }
 }

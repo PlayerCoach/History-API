@@ -38,4 +38,13 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <!-- Security roles declaration -->
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>USER</role-name>
+    </security-role>
+
 </web-app>

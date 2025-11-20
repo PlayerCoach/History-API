@@ -1,0 +1,69 @@
+### Lab6 - Security & Authorization focused tests
+@base = http://localhost:9080/historyapi/api
+@testUserId = fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+@figureIdCurie = 15a7fae0-7ac1-11eb-8001-0242ac110002
+@noteIdCurie = 25b8c3a0-7ac1-11eb-8001-0242ac110002
+
+### Check login/register permission (permitAll)
+### Registration allowed without auth
+POST {{base}}/users
+Content-Type: application/json
+
+{
+  "login": "authcheck",
+  "email": "authcheck@example.com",
+  "password": "p@ssW0rd"
+}
+
+### Role enforcement - Figures
+# USER must NOT create figures (403)
+POST {{base}}/figures/
+Content-Type: application/json
+Authorization: Basic test password123
+
+{ "name": "RoleTestFigure" }
+
+### ADMIN must be able to create figures
+POST {{base}}/figures/
+Content-Type: application/json
+Authorization: Basic admin admin123
+
+{ "name": "RoleTestFigureAdmin" }
+
+### Role enforcement - Notes ownership
+# Create note as USER
+POST {{base}}/figures/{{figureIdCurie}}/notes
+Content-Type: application/json
+Authorization: Basic test password123
+
+{
+  "title": "OwnerTest",
+  "content": "Owner test content",
+  "mode": "PRIVATE"
+}
+
+### Try to edit someone else's note as USER (expect 403)
+PUT {{base}}/figures/{{figureIdCurie}}/notes/{{noteIdCurie}}
+Content-Type: application/json
+Authorization: Basic test password123
+
+{ "title": "Hack attempt" }
+
+### Check DB-level filtering: USER notes list should contain only its notes
+GET {{base}}/notes
+Accept: application/json
+Authorization: Basic test password123
+
+### Admin should see all notes
+GET {{base}}/notes
+Accept: application/json
+Authorization: Basic admin admin123
+
+### Avatar upload negative (unsupported type)
+POST {{base}}/users/{{testUserId}}/avatar
+Content-Type: image/gif
+
+< ./src/main/resources/avatars/3.jpg
+
+### End of security focused tests
+

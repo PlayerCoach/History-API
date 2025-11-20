@@ -1,13 +1,13 @@
 package pl.edu.pg.eti.kask.historyapi.historicalfigure.repository;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 
 import java.util.*;
 
-@ApplicationScoped
+@Stateless
 public class HistoricalFigureRepository {
 
     @PersistenceContext(unitName = "historyPU")

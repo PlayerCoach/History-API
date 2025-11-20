@@ -1,6 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.user.avatar.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.user.avatar.repository.AvatarRepository;
 import pl.edu.pg.eti.kask.historyapi.user.repository.UserRepository;
@@ -8,13 +8,10 @@ import pl.edu.pg.eti.kask.historyapi.user.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
-@ApplicationScoped
+
+@Stateless
 public class AvatarService {
     private AvatarRepository avatarRepository;
     private  UserRepository userRepository;

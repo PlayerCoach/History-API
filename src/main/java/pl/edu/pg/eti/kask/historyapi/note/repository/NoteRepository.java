@@ -1,13 +1,13 @@
 package pl.edu.pg.eti.kask.historyapi.note.repository;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 
 import java.util.*;
 
-@ApplicationScoped
+@Stateless
 public class NoteRepository {
 
     @PersistenceContext(unitName = "historyPU")
@@ -27,6 +27,19 @@ public class NoteRepository {
     public List<Note> findByFigureId(UUID figureId) {
         return em.createQuery("SELECT n FROM Note n WHERE n.historicalFigure.id = :figureId", Note.class)
                 .setParameter("figureId", figureId)
+                .getResultList();
+    }
+
+    public List<Note> findByFigureIdAndOwner(UUID figureId, String username) {
+        return em.createQuery("SELECT n FROM Note n WHERE n.historicalFigure.id = :figureId AND n.createdBy.login = :username", Note.class)
+                .setParameter("figureId", figureId)
+                .setParameter("username", username)
+                .getResultList();
+    }
+
+    public List<Note> findByOwner(String username) {
+        return em.createQuery("SELECT n FROM Note n WHERE n.createdBy.login = :username", Note.class)
+                .setParameter("username", username)
                 .getResultList();
     }
 

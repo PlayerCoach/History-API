@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.kask.historyapi.user.avatar.repository;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 
@@ -12,7 +12,7 @@ import java.nio.file.*;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Stateless
 public class AvatarRepository {
     private  Path storageDirectory;
 

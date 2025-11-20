@@ -1,8 +1,7 @@
 package pl.edu.pg.eti.kask.historyapi.note.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.repository.NoteRepository;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Stateless
 public class NoteService {
 
     @Inject
@@ -30,18 +29,23 @@ public class NoteService {
         return repository.findByFigureId(figureId);
     }
 
+    public List<Note> findByFigureIdAndOwner(UUID figureId, String username) {
+        return repository.findByFigureIdAndOwner(figureId, username);
+    }
 
-    @Transactional
+    public List<Note> findByOwner(String username) {
+        return repository.findByOwner(username);
+    }
+
+
     public void deleteNotesWithHistoricalFigureId(UUID historicalFigureId) {
         repository.deleteNotesWithHistoricalFigureId(historicalFigureId);
     }
 
-    @Transactional
     public void delete(UUID id) {
         repository.delete(id);
     }
 
-    @Transactional
     public void save(Note note) {
         repository.save(note);
     }

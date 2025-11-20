@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.historicalfigure.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -22,6 +23,7 @@ public class HistoricalFigureController {
     private HistoricalFigureService figureService;
 
     @GET
+    @RolesAllowed({"ADMIN", "USER"})
     public List<HistoricalFigure> getAllFigures() {
         return figureService.findAll();
     }
@@ -29,6 +31,7 @@ public class HistoricalFigureController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"ADMIN", "USER"})
     public Response getFigureById(@PathParam("id") UUID id) {
         return figureService.findById(id)
                 .map(Response::ok)
@@ -36,6 +39,7 @@ public class HistoricalFigureController {
     }
 
     @POST
+    @RolesAllowed("ADMIN")
     public Response createFigure(HistoricalFigure figure) {
         figure.setId(UUID.randomUUID());
         figureService.save(figure);
@@ -45,6 +49,7 @@ public class HistoricalFigureController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public Response updateFigure(@PathParam("id") UUID id, HistoricalFigure figure) {
         figure.setId(id);
         figureService.save(figure);
@@ -54,6 +59,7 @@ public class HistoricalFigureController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public Response deleteFigure(@PathParam("id") UUID id) {
         //Service has cascade delete implemented
         figureService.delete(id);

@@ -10,6 +10,7 @@
 
         <class>pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure</class>
         <class>pl.edu.pg.eti.kask.historyapi.note.entity.Note</class>
+        <class>pl.edu.pg.eti.kask.historyapi.user.entity.User</class>
 
         <shared-cache-mode>NONE</shared-cache-mode>
 

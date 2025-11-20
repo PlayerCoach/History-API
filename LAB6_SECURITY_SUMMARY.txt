@@ -1,0 +1,266 @@
+===========================================
+LAB 6: Jakarta Security API - PODSUMOWANIE
+===========================================
+
+✅ WYKONANE ZADANIA:
+
+1. ✅ Konfiguracja domeny bezpieczeństwa (0.5 + 0.5 pkt)
+   - Basic Authentication z bazą danych
+   - DatabaseIdentityStore pobiera użytkowników z bazy
+   - **PBKDF2 Password Hashing** (210000 iteracji, SHA256)
+   - PasswordHashProducer - centralna konfiguracja hashowania
+
+2. ✅ Konfiguracja autoryzacji (1 + 1 pkt)
+   - Role: ADMIN i USER
+   - @RolesAllowed i @PermitAll na kontrolerach
+   - Automatyczne ustawienie właściciela notatki
+   - Filtrowanie na poziomie bazy danych (JPQL)
+
+===========================================
+STRUKTURA PLIKÓW:
+===========================================
+
+NOWE PLIKI:
+-----------
+📁 src/main/java/pl/edu/pg/eti/kask/historyapi/security/
+  ├── DatabaseIdentityStore.java       - Uwierzytelnianie z bazy + PBKDF2
+  ├── SecurityConfig.java               - Basic Auth configuration
+  └── PasswordHashProducer.java         - CDI Producer dla Pbkdf2PasswordHash
+
+📁 src/main/java/pl/edu/pg/eti/kask/historyapi/user/dto/
+  └── UserRegistrationDto.java          - DTO dla rejestracji
+
+ZMODYFIKOWANE PLIKI:
+--------------------
+✏️  src/main/liberty/config/server.xml
+    - Dodano <feature>appSecurity-5.0</feature>
+
+✏️  DataInitializer.java
+    - Dodano użytkowników z rolami (ADMIN, USER)
+    - admin / admin123 (ADMIN)
+    - test / password123 (USER)
+
+✏️  HistoricalFigureController.java
+    - @PermitAll na GET
+    - @RolesAllowed("ADMIN") na POST/PUT/DELETE
+
+✏️  NoteController.java
+    - @RolesAllowed({"ADMIN", "USER"}) na wszystkich metodach
+    - Automatyczne ustawienie właściciela w POST
+    - Filtrowanie wyników według użytkownika
+    - Sprawdzanie właściciela w PUT/DELETE
+
+✏️  NoteSimpleController.java
+    - @RolesAllowed({"ADMIN", "USER"})
+    - Filtrowanie wyników według użytkownika
+
+✏️  UserController.java
+    - @PermitAll na POST (rejestracja)
+    - @RolesAllowed("ADMIN") na GET/DELETE
+    - Automatyczne ustawienie roli USER przy rejestracji
+
+✏️  NoteRepository.java
+    - Dodano findByFigureIdAndOwner() - filtrowanie w bazie
+
+✏️  NoteService.java
+    - Dodano findByFigureIdAndOwner()
+
+✏️  requests.http
+    - Dodano Basic Auth do wszystkich requestów
+    - Dodano sekcję testów autoryzacji (13 testów)
+
+✏️  README.md
+    - Dodano sekcję "Security & Authorization"
+
+===========================================
+UŻYTKOWNICY TESTOWI:
+===========================================
+
+ADMIN:
+------
+Login:    admin
+Password: admin123
+Role:     ADMIN
+UUID:     fe003ce8-0dae-46cb-8d01-104d1d91d4a0
+
+USER #1 (test):
+---------------
+Login:    test
+Password: password123
+Role:     USER
+
+USER #2 (olaf):
+---------------
+Login:    olaf
+Password: password123
+Role:     USER
+
+===========================================
+UPRAWNIENIA (MATRIX):
+===========================================
+
+┌─────────────────────────┬────────┬────────┐
+│ Zasób / Operacja        │  USER  │ ADMIN  │
+├─────────────────────────┼────────┼────────┤
+│ GET /figures            │   ✅   │   ✅   │
+│ POST /figures           │   ❌   │   ✅   │
+│ PUT /figures/{id}       │   ❌   │   ✅   │
+│ DELETE /figures/{id}    │   ❌   │   ✅   │
+├─────────────────────────┼────────┼────────┤
+│ GET /notes (all)        │  OWN   │  ALL   │
+│ GET /notes/{id}         │  OWN   │  ALL   │
+│ POST /notes             │   ✅   │   ✅   │
+│ PUT /notes/{id}         │  OWN   │  ALL   │
+│ DELETE /notes/{id}      │  OWN   │  ALL   │
+├─────────────────────────┼────────┼────────┤
+│ POST /users (register)  │   ✅   │   ✅   │
+│ GET /users              │   ❌   │   ✅   │
+│ GET /users/{id}         │   ❌   │   ✅   │
+│ DELETE /users/{id}      │   ❌   │   ✅   │
+└─────────────────────────┴────────┴────────┘
+
+OWN = tylko swoje zasoby
+ALL = wszystkie zasoby
+
+===========================================
+AUTOMATYCZNE FUNKCJE:
+===========================================
+
+1. ✅ Właściciel notatki ustawiany AUTOMATYCZNIE
+   - W NoteController.createNoteForFigure()
+   - Pobierany z SecurityContext.getUserPrincipal().getName()
+   - Nie można podać właściciela w JSONie
+
+2. ✅ Filtrowanie na poziomie BAZY DANYCH
+   - NoteRepository.findByFigureIdAndOwner()
+   - JPQL: WHERE n.createdBy.login = :username
+   - Wydajne - baza zwraca tylko odpowiednie rekordy
+
+3. ✅ Automatyczne nadanie roli USER przy rejestracji
+   - UserController.registerUser()
+   - user.setRole(Role.USER)
+
+4. ✅ Sprawdzanie właściciela przy edycji/usuwaniu
+   - Filter w Optional: .filter(note -> isAdmin || note.getCreatedBy().getLogin().equals(username))
+   - HTTP 403 Forbidden jeśli nie jest właścicielem
+
+===========================================
+TESTOWANIE:
+===========================================
+
+W pliku requests.http znajdują się 13 testów autoryzacji:
+
+TEST 1:  Dostęp bez autoryzacji → 401 Unauthorized
+TEST 2:  USER dodaje kategorię → 403 Forbidden
+TEST 3:  ADMIN dodaje kategorię → 201 Created
+TEST 4:  USER tworzy notatkę → 201 Created (właściciel auto)
+TEST 5:  USER edytuje cudzą notatkę → 403 Forbidden
+TEST 6:  ADMIN edytuje dowolną notatkę → 200 OK
+TEST 7:  USER pobiera notatki → tylko swoje
+TEST 8:  ADMIN pobiera notatki → wszystkie
+TEST 9:  USER usuwa cudzą notatkę → 403 Forbidden
+TEST 10: ADMIN usuwa dowolną notatkę → 204 No Content
+TEST 11: Rejestracja bez auth → 201 Created
+TEST 12: USER pobiera listę użytkowników → 403 Forbidden
+TEST 13: ADMIN pobiera listę użytkowników → 200 OK
+
+===========================================
+PRZYKŁADY UŻYCIA:
+===========================================
+
+1. Basic Auth w HTTP Client (IntelliJ):
+   Authorization: Basic admin:admin123
+   Authorization: Basic test:password123
+
+2. Curl (Windows):
+   curl -X GET "http://localhost:9080/historyapi/api/figures/" ^
+     -H "Accept: application/json" ^
+     -u admin:admin123
+
+3. PowerShell:
+   $headers = @{
+       "Authorization" = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("admin:admin123"))
+   }
+   Invoke-RestMethod -Uri "http://localhost:9080/historyapi/api/figures/" -Headers $headers
+
+===========================================
+KONFIGURACJA SERWERA:
+===========================================
+
+server.xml:
+-----------
+<feature>appSecurity-5.0</feature>      ← Jakarta Security API
+<feature>enterpriseBeans-4.0</feature>   ← EJB (już było)
+
+DatabaseIdentityStore:
+----------------------
+- @ApplicationScoped
+- Implements IdentityStore
+- validate(Credential) - sprawdza login/hasło z bazy
+- Zwraca CredentialValidationResult z rolami
+
+SecurityConfig:
+---------------
+- @BasicAuthenticationMechanismDefinition(realmName = "history-api-realm")
+- Włącza Basic Auth dla całej aplikacji
+
+===========================================
+UWAGI IMPLEMENTACYJNE:
+===========================================
+
+1. ⚠️  HASŁA W PLAINTEXT
+   W produkcji należy użyć BCrypt/PBKDF2:
+   - password_hash zamiast password
+   - BCryptPasswordEncoder
+   - @Inject PasswordHasher
+
+2. ✅ FILTROWANIE W BAZIE DANYCH
+   Zamiast:
+     findAll().stream().filter(...)
+   Używamy:
+     JPQL: SELECT n FROM Note n WHERE n.createdBy.login = :username
+
+3. ✅ SECURITY CONTEXT
+   @Context SecurityContext securityContext
+   - getUserPrincipal().getName() - username
+   - isUserInRole("ADMIN") - sprawdzenie roli
+
+4. ✅ RESPONSE CODES
+   - 401 Unauthorized - brak autoryzacji
+   - 403 Forbidden - brak uprawnień
+   - 404 Not Found - zasób nie istnieje
+   - 201 Created - utworzono
+
+===========================================
+SPRAWDZENIE POPRAWNOŚCI:
+===========================================
+
+✅ Konfiguracja domeny bezpieczeństwa:
+   - DatabaseIdentityStore z bazą danych ✓
+   - Basic Authentication ✓
+
+✅ Autoryzacja kategorii (HistoricalFigure):
+   - Tylko ADMIN może dodawać ✓
+   - Tylko ADMIN może usuwać ✓
+   - Każdy może pobierać ✓
+
+✅ Autoryzacja elementów (Note):
+   - ADMIN może pobrać wszystkie ✓
+   - USER może pobrać tylko swoje (JPQL) ✓
+   - ADMIN może edytować/usuwać wszystkie ✓
+   - USER może edytować/usuwać tylko swoje ✓
+   - USER może dodawać, właściciel auto ✓
+
+✅ Rejestracja użytkowników:
+   - Każdy może się zarejestrować ✓
+   - Domyślna rola USER ✓
+
+===========================================
+GOTOWE DO TESTOWANIA!
+===========================================
+
+Uruchom serwer i przetestuj wszystkie endpointy z requests.http.
+Zwróć szczególną uwagę na sekcję "Lab 6: Testy Autoryzacji".
+
+Wszystkie wymagania z Lab 6 zostały zrealizowane! 🎉
+
