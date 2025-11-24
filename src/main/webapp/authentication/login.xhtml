@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:view>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Login - HistoryAPI</title>
+        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
+        <h:outputStylesheet library="default" name="css/main.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">Logowanie</h3>
+
+                            <h:form>
+                                <div class="mb-3">
+                                    <h:outputLabel for="username" value="Nazwa użytkownika:" styleClass="form-label"/>
+                                    <h:inputText id="username"
+                                                 value="#{loginBean.username}"
+                                                 styleClass="form-control"
+                                                 required="true"
+                                                 requiredMessage="Nazwa użytkownika jest wymagana"/>
+                                    <h:message for="username" styleClass="text-danger"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h:outputLabel for="password" value="Hasło:" styleClass="form-label"/>
+                                    <h:inputSecret id="password"
+                                                   value="#{loginBean.password}"
+                                                   styleClass="form-control"
+                                                   required="true"
+                                                   requiredMessage="Hasło jest wymagane"/>
+                                    <h:message for="password" styleClass="text-danger"/>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <h:commandButton value="Zaloguj"
+                                                     action="#{loginBean.login}"
+                                                     styleClass="btn btn-primary"/>
+                                </div>
+
+                                <h:messages globalOnly="true" styleClass="alert alert-danger mt-3" role="alert"/>
+                            </h:form>
+
+                            <div class="text-center mt-3">
+                                <h:link outcome="/index" value="Powrót do strony głównej" styleClass="text-muted"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>
+

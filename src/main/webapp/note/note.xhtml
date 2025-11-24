@@ -38,10 +38,21 @@
             </dl>
 
             <hr/>
-            <h:link outcome="/historicalfigure/figure" value="Wróć do postaci (#{noteDetailView.figure.name})"
-                    styleClass="btn btn-secondary">
-                <f:param name="figureId" value="#{noteDetailView.figure.id}" />
-            </h:link>
+            <div class="btn-group" role="group">
+                <h:link outcome="/historicalfigure/figure"
+                        value="Wróć do postaci (#{noteDetailView.figure.name})"
+                        styleClass="btn btn-secondary">
+                    <f:param name="figureId" value="#{noteDetailView.figure.id}" />
+                </h:link>
+
+                <!-- Tylko właściciel lub admin może edytować -->
+                <h:link outcome="/note/note_edit"
+                        value="Edytuj"
+                        styleClass="btn btn-primary"
+                        rendered="#{authBean.admin or (noteDetailView.note.createdBy != null and noteDetailView.note.createdBy.login eq authBean.username)}">
+                    <f:param name="noteId" value="#{noteDetailView.note.id}" />
+                </h:link>
+            </div>
 
         </h:panelGroup>
     </ui:define>

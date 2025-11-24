@@ -49,10 +49,16 @@
 
                     <h:column>
                         <f:facet name="header">Akcje</f:facet>
-                        <h:commandButton value="Usuń" action="#{figureDetailView.deleteNote(note.id)}"
+                        <!-- Tylko właściciel lub admin może usunąć/edytować notatkę -->
+                        <h:commandButton value="Usuń"
+                                         action="#{figureDetailView.deleteNote(note.id)}"
                                          styleClass="btn btn-warning btn-sm action-button"
+                                         rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}"
                                          onclick="return confirm('Czy na pewno chcesz usunąć notatkę: #{note.title}?');" />
-                        <h:link outcome="/note/note_edit" value="Edytuj" styleClass="btn btn-info btn-sm action-button">
+                        <h:link outcome="/note/note_edit"
+                                value="Edytuj"
+                                styleClass="btn btn-info btn-sm action-button"
+                                rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}">
                             <f:param name="noteId" value="#{note.id}" />
                         </h:link>
 

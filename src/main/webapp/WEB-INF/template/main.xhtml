@@ -34,7 +34,27 @@
     <h:body>
         <div class="container">
             <header class="mb-4 mt-4 header-with-bg" >
-                <h1>HistoryAPI</h1>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1>HistoryAPI</h1>
+                    <div>
+                        <h:panelGroup rendered="#{authBean.loggedIn}">
+                            <span class="text-white me-3">
+                                Zalogowany: <strong>#{authBean.username}</strong>
+                                <h:outputText value=" (Administrator)" rendered="#{authBean.admin}" styleClass="badge bg-warning"/>
+                            </span>
+                            <h:form styleClass="d-inline">
+                                <h:commandButton value="Wyloguj"
+                                                action="#{loginBean.logout}"
+                                                styleClass="btn btn-light btn-sm"/>
+                            </h:form>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{!authBean.loggedIn}">
+                            <h:link outcome="/authentication/login"
+                                   value="Zaloguj się"
+                                   styleClass="btn btn-light btn-sm"/>
+                        </h:panelGroup>
+                    </div>
+                </div>
             </header>
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">

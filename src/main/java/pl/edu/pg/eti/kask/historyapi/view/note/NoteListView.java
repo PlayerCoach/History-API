@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.security.enterprise.SecurityContext;
 import lombok.Getter;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.service.HistoricalFigureService;
@@ -32,6 +33,9 @@ public class NoteListView {
     @Inject
     private HistoricalFigureService figureService;
 
+    @Inject
+    private SecurityContext securityContext;
+
     @Getter
     private List<Note> notes;
     private Map<UUID, String> userNameMap;
@@ -40,8 +44,21 @@ public class NoteListView {
 
     @PostConstruct
     public void init() {
-        notes = noteService.findAll();
-
+        // Administrator widzi wszystkie notatki, zwykły użytkownik tylko swoje
+        if (securityContext.isCallerInRole("ADMIN")) {
+            notes = noteService.findAll();
+        } else {
+            String username = securityContext.getCallerPrincipal().getName();
+            User currentUser = userService.findByLogin(username).orElse(null);
+            if (currentUser != null) {
+                notes = noteService.findAll().stream()
+                        .filter(note -> note.getCreatedBy() != null &&
+                                       note.getCreatedBy().getId().equals(currentUser.getId()))
+                        .collect(Collectors.toList());
+            } else {
+                notes = List.of();
+            }
+        }
 
         userNameMap = userService.findAll().stream()
                 .collect(Collectors.toMap(User::getId, User::getLogin));

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+<f:view>
+    <h:head>
+        <title>404 - Nie znaleziono</title>
+        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
+    </h:head>
+    <h:body>
+        <div class="container mt-5">
+            <div class="text-center">
+                <h1 class="display-1">404</h1>
+                <h2>Strona nie znaleziona</h2>
+                <p class="lead">Strona, której szukasz, nie istnieje.</p>
+                <h:link outcome="/index" value="Strona główna" styleClass="btn btn-primary"/>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>
+

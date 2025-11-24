@@ -35,8 +35,11 @@
                         <f:param name="figureId" value="#{fig.id}" />
                     </h:link>
 
-                    <h:commandButton value="Usuń" action="#{figureListView.deleteFigure(fig.id)}"
+                    <!-- Tylko administrator może usuwać kategorie -->
+                    <h:commandButton value="Usuń"
+                                     action="#{figureListView.deleteFigure(fig.id)}"
                                      styleClass="btn btn-danger btn-sm ms-2"
+                                     rendered="#{authBean.admin}"
                                      onclick="return confirm('Czy na pewno chcesz usunąć postać #{fig.name} i WSZYSTKIE jej notatki?');" />
                 </h:column>
 

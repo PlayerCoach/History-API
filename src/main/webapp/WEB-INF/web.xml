@@ -38,6 +38,41 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <!-- Security constraints for JSF pages -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>historical-figures</web-resource-name>
+            <url-pattern>/historicalfigure/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER</role-name>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>notes</web-resource-name>
+            <url-pattern>/note/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER</role-name>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Security constraints for REST API -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>api-endpoints</web-resource-name>
+            <url-pattern>/api/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER</role-name>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+
     <!-- Security roles declaration -->
     <security-role>
         <role-name>ADMIN</role-name>
@@ -46,5 +81,21 @@
     <security-role>
         <role-name>USER</role-name>
     </security-role>
+
+    <!-- Error pages -->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/error/401.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/403.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.xhtml</location>
+    </error-page>
 
 </web-app>
