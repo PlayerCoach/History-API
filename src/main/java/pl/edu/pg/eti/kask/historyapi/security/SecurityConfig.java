@@ -19,6 +19,5 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
     }
 )
 public class SecurityConfig {
-    // Empty class - all configuration is done via annotations above
 }
 

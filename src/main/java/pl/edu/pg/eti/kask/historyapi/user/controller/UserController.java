@@ -3,7 +3,6 @@ package pl.edu.pg.eti.kask.historyapi.user.controller;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -18,8 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Path("/users")
@@ -33,9 +30,6 @@ public class UserController {
     @Inject
     private AvatarService avatarService;
 
-    @Inject
-    private Pbkdf2PasswordHash passwordHash;
-
     @POST
     @PermitAll // każdy może się zarejestrować
     public Response registerUser(UserRegistrationDto dto) {
@@ -46,18 +40,11 @@ public class UserController {
                     .build();
         }
 
-        // Configure password hash
-        Map<String, String> params = new HashMap<>();
-        params.put("Pbkdf2PasswordHash.Iterations", "210000");
-        params.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256");
-        params.put("Pbkdf2PasswordHash.SaltSizeBytes", "32");
-        passwordHash.initialize(params);
-
         User user = new User();
         user.setId(UUID.randomUUID());
         user.setLogin(dto.getLogin());
         user.setEmail(dto.getEmail());
-        user.setPassword(passwordHash.generate(dto.getPassword().toCharArray())); // Hashed password
+        user.setPassword(dto.getPassword()); // Plain password - will be hashed in UserService
         user.setRole(Role.USER); // nowi użytkownicy domyślnie mają rolę USER
 
         userService.save(user);

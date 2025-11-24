@@ -290,6 +290,8 @@ Authorization: Basic admin admin123
 
 ### ===============================================================
 ### 5. TESTY NEGATYWNE - brak autoryzacji
+### UWAGA: Testy usuwania użytkownika - ADMIN usuwa 'newuser', NIE SIEBIE!
+### (w przeciwnym razie kolejne testy z admin będą zwracać 401)
 ### ===============================================================
 
 ### ❌ [5.1] Dostęp bez autoryzacji do chronionych zasobów (401 Unauthorized)
@@ -308,15 +310,24 @@ Content-Type: application/json
 }
 
 ###
-### ❌ [5.3] Próba usunięcia użytkownika jako USER (403 Forbidden - tylko ADMIN)
+### ✅ [5.3] ADMIN pobiera listę użytkowników - znajdź ID 'newuser'
 # @no-cookie-jar
-DELETE {{base}}/users/{{adminId}}
+GET {{base}}/users
+Accept: application/json
+Authorization: Basic admin admin123
+
+###
+### ❌ [5.4] Próba usunięcia użytkownika jako USER (403 Forbidden - tylko ADMIN)
+# Użyj ID 'newuser' z poprzedniej odpowiedzi
+# @no-cookie-jar
+DELETE {{base}}/users/{newuser-id-here}
 Authorization: Basic test password123
 
 ###
-### ✅ [5.4] ADMIN może usunąć użytkownika (204 No Content)
+### ✅ [5.5] ADMIN może usunąć użytkownika 'newuser' (204 No Content)
+# Użyj tego samego ID 'newuser' z testu 5.3
 # @no-cookie-jar
-DELETE {{base}}/users/{{adminId}}
+DELETE {{base}}/users/{newuser-id-here}
 Authorization: Basic admin admin123
 
 ### ===============================================================
