@@ -7,16 +7,16 @@
       xmlns:f="jakarta.faces.core">
 <f:view>
     <h:head>
-        <title>403 - Zabroniony</title>
+        <title>403 - #{msg['error.403.title']}</title>
         <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
     </h:head>
     <h:body>
         <div class="container mt-5">
             <div class="text-center">
                 <h1 class="display-1">403</h1>
-                <h2>Dostęp zabroniony</h2>
-                <p class="lead">Nie masz uprawnień do przeglądania tego zasobu.</p>
-                <h:link outcome="/index" value="Strona główna" styleClass="btn btn-primary"/>
+                <h2>#{msg['error.403.title']}</h2>
+                <p class="lead">#{msg['error.403.message']}</p>
+                <h:link outcome="/index" value="#{msg['error.403.home']}" styleClass="btn btn-primary"/>
             </div>
         </div>
     </h:body>

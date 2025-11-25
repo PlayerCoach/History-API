@@ -19,21 +19,21 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title text-center mb-4 text-danger">Błąd logowania</h3>
+                            <h3 class="card-title text-center mb-4 text-danger">#{msg['login.error.title']}</h3>
 
                             <div class="alert alert-danger" role="alert">
-                                <strong>Logowanie nie powiodło się!</strong><br/>
-                                Nieprawidłowa nazwa użytkownika lub hasło.
+                                <strong>#{msg['login.error.message']}</strong><br/>
+                                #{msg['login.error.description']}
                             </div>
 
                             <div class="d-grid gap-2">
                                 <h:link outcome="/authentication/login"
-                                        value="Spróbuj ponownie"
+                                        value="#{msg['login.error.tryAgain']}"
                                         styleClass="btn btn-primary"/>
                             </div>
 
                             <div class="text-center mt-3">
-                                <h:link outcome="/index" value="Powrót do strony głównej" styleClass="text-muted"/>
+                                <h:link outcome="/index" value="#{msg['login.backToHome']}" styleClass="text-muted"/>
                             </div>
                         </div>
                     </div>

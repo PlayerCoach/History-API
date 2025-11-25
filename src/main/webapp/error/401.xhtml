@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-</html>
-</f:view>
-    </h:body>
-        </div>
-            </div>
-                <h:link outcome="/index" value="Strona główna" styleClass="btn btn-secondary ms-2"/>
-                <h:link outcome="/authentication/login" value="Przejdź do logowania" styleClass="btn btn-primary"/>
-                <p class="lead">Musisz się zalogować, aby uzyskać dostęp do tego zasobu.</p>
-                <h2>Nieautoryzowany dostęp</h2>
-                <h1 class="display-1">401</h1>
-            <div class="text-center">
-        <div class="container mt-5">
-    <h:body>
-    </h:head>
-        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
-        <title>401 - Nieautoryzowany</title>
-    <h:head>
-<f:view>
-      xmlns:f="jakarta.faces.core">
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:h="jakarta.faces.html"
-      xmlns="http://www.w3.org/1999/xhtml"
-<html lang="pl"
 <!DOCTYPE html>
+<html lang="pl"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+<f:view>
+    <h:head>
+        <title>401 - #{msg['error.401.title']}</title>
+        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
+    </h:head>
+    <h:body>
+        <div class="container mt-5">
+            <div class="text-center">
+                <h1 class="display-1">401</h1>
+                <h2>#{msg['error.401.title']}</h2>
+                <p class="lead">#{msg['error.401.message']}</p>
+                <h:link outcome="/authentication/login" value="#{msg['error.401.login']}" styleClass="btn btn-primary"/>
+                <h:link outcome="/index" value="#{msg['error.401.home']}" styleClass="btn btn-secondary ms-2"/>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>
 

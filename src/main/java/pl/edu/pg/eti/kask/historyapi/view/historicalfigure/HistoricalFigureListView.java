@@ -27,8 +27,9 @@ public class HistoricalFigureListView {
     }
 
     public String deleteFigure(UUID id) {
-
         figureService.delete(id);
-        return "figures?faces-redirect=true";
+        // Reset listy aby AJAX przeładował dane
+        figures = null;
+        return null; // Dla AJAX zwracamy null zamiast nawigacji
     }
 }

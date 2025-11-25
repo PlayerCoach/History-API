@@ -9,59 +9,63 @@
         <f:viewParam name="figureId" value="#{figureDetailView.figureId}" required="true" />
     </f:metadata>
 
-    <ui:define name="title">Detale: #{figureDetailView.figure.name}</ui:define>
+    <ui:define name="title">#{msg['figures.detail.title']} #{figureDetailView.figure.name}</ui:define>
 
     <ui:define name="content">
 
         <h:panelGroup rendered="#{figureDetailView.figure == null}">
-            <h2>Postać nie została znaleziona!</h2>
-            <p>Upewnij się, że podałeś poprawne ID.</p>
+            <h2>#{msg['figures.notFound']}</h2>
+            <p>#{msg['figures.notFound.description']}</p>
         </h:panelGroup>
 
         <h:panelGroup rendered="#{figureDetailView.figure != null}">
 
-            <h2>Detale Postaci: #{figureDetailView.figure.name}</h2>
+            <h2>#{msg['figures.detail.title']} #{figureDetailView.figure.name}</h2>
             <ul class="list-group mb-3">
-                <li class="list-group-item"><b>ID:</b> #{figureDetailView.figure.id}</li>
-                <li class="list-group-item"><b>Data urodzenia:</b> #{figureDetailView.figure.dateOfBrith}</li>
-                <li class="list-group-item"><b>Data śmierci:</b> #{figureDetailView.figure.dateOfDeath}</li>
+                <li class="list-group-item"><b>#{msg['figures.detail.id']}</b> #{figureDetailView.figure.id}</li>
+                <li class="list-group-item"><b>#{msg['figures.detail.birthDate']}</b> #{figureDetailView.figure.dateOfBrith}</li>
+                <li class="list-group-item"><b>#{msg['figures.detail.deathDate']}</b> #{figureDetailView.figure.dateOfDeath}</li>
             </ul>
 
             <hr/>
 
-            <h3>Notatki (Elementy) powiązane z tą postacią</h3>
-            <h:link outcome="/note/note_edit" value="Dodaj" styleClass="btn btn-success action-button">
+            <h3>#{msg['notes.relatedToFigure']}</h3>
+            <h:link outcome="/note/note_edit" value="#{msg['notes.addNote']}" styleClass="btn btn-success action-button">
+                <f:param name="figureId" value="#{figureDetailView.figureId}" />
             </h:link>
             <h:form id="noteListForm">
-                <h:dataTable value="#{figureDetailView.notes}" var="note" styleClass="table table-sm">
+                <h:messages id="noteMessages" globalOnly="true" styleClass="alert alert-info" role="alert"/>
+
+                <h:dataTable id="notesTable" value="#{figureDetailView.notes}" var="note" styleClass="table table-sm">
 
                     <h:column>
-                        <f:facet name="header">Tytuł Notatki</f:facet>
+                        <f:facet name="header">#{msg['notes.column.title']}</f:facet>
                         <h:link outcome="/note/note" value="#{note.title}">
                             <f:param name="noteId" value="#{note.id}" />
                         </h:link>
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Tryb</f:facet>
+                        <f:facet name="header">#{msg['notes.column.mode']}</f:facet>
                         #{note.mode}
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Akcje</f:facet>
+                        <f:facet name="header">#{msg['notes.column.actions']}</f:facet>
                         <!-- Tylko właściciel lub admin może usunąć/edytować notatkę -->
-                        <h:commandButton value="Usuń"
+                        <h:commandButton value="#{msg['notes.action.delete']}"
                                          action="#{figureDetailView.deleteNote(note.id)}"
                                          styleClass="btn btn-warning btn-sm action-button"
                                          rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}"
-                                         onclick="return confirm('Czy na pewno chcesz usunąć notatkę: #{note.title}?');" />
+                                         onclick="return confirm('#{msg['notes.delete.confirm'].replace('{0}', note.title)}');">
+                            <f:ajax execute="@this" render="notesTable noteMessages"/>
+                        </h:commandButton>
                         <h:link outcome="/note/note_edit"
-                                value="Edytuj"
+                                value="#{msg['notes.action.edit']}"
                                 styleClass="btn btn-info btn-sm action-button"
                                 rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}">
                             <f:param name="noteId" value="#{note.id}" />
                         </h:link>
-
                     </h:column>
 
 

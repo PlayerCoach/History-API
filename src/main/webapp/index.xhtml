@@ -6,16 +6,16 @@
                 template="/WEB-INF/template/main.xhtml">
 
     <ui:define name="title">
-        HistoryAPI- Strona Główna
+        #{msg['home.title']}
     </ui:define>
 
     <ui:define name="content">
         <article class="">
             <header>
-                <h2>Home</h2>
+                <h2>#{msg['home.title']}</h2>
             </header>
             <section>
-                <p>HistoryAPI home page.</p>
+                <p>#{msg['home.welcome']}</p>
             </section>
         </article>
     </ui:define>

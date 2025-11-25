@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:view locale="#{localeBean.locale}">
+    <h:head>
+        <title>Test i18n</title>
+        <style>
+            body { font-family: Arial; padding: 20px; }
+            .test-box { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+            .success { color: green; }
+            .error { color: red; }
+        </style>
+    </h:head>
+    <h:body>
+        <h1>Test Lokalizacji i Obrazka</h1>
+
+        <div class="test-box">
+            <h2>Test 1: LocaleBean</h2>
+            <p>Język: <strong>#{localeBean.language}</strong></p>
+            <p>Locale: <strong>#{localeBean.locale}</strong></p>
+            <p>Obrazek: <strong>#{localeBean.backgroundImage}</strong></p>
+        </div>
+
+        <div class="test-box">
+            <h2>Test 2: Tłumaczenia</h2>
+            <p>app.header.title: <strong>#{msg['app.header.title']}</strong></p>
+            <p>app.header.loggedAs: <strong>#{msg['app.header.loggedAs']}</strong></p>
+            <p>app.header.logout: <strong>#{msg['app.header.logout']}</strong></p>
+            <p>nav.home: <strong>#{msg['nav.home']}</strong></p>
+            <p>footer.author: <strong>#{msg['footer.author']}</strong></p>
+        </div>
+
+        <div class="test-box">
+            <h2>Test 3: Polskie znaki</h2>
+            <p>ą ć ę ł ń ó ś ź ż</p>
+            <p>Ą Ć Ę Ł Ń Ó Ś Ź Ż</p>
+            <p>Z msg: #{msg['login.password']}</p>
+        </div>
+
+        <div class="test-box">
+            <h2>Test 4: Obrazek tła</h2>
+            <p>URL: <strong>#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}</strong></p>
+            <div style="width: 300px; height: 200px;
+                        background-image: url('#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}');
+                        background-size: cover;">
+            </div>
+        </div>
+
+        <div class="test-box">
+            <h2>Zmiana języka</h2>
+            <h:form>
+                <h:commandButton value="Polski" action="#{localeBean.changeLanguage('pl')}" />
+                <h:commandButton value="English" action="#{localeBean.changeLanguage('en')}" />
+            </h:form>
+        </div>
+
+        <p><h:link value="Wróć do strony głównej" outcome="/index" /></p>
+    </h:body>
+</f:view>
+</html>
+

@@ -51,8 +51,8 @@ public class HistoricalFigureSingularView implements Serializable {
 
     public String deleteNote(UUID noteId) {
         noteService.delete(noteId);
-        notes = null;
-        return "/historicalfigure/figure?faces-redirect=true&figureId=" + figureId;
+        notes = null; // Reset listy dla AJAX
+        return null; // Dla AJAX zwracamy null
     }
 
     public HistoricalFigure getFigure() {

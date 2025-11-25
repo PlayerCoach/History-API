@@ -8,7 +8,7 @@
     <h:head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Login - HistoryAPI</title>
+        <title>#{msg['login.title']} - HistoryAPI</title>
         <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
         <h:outputStylesheet library="default" name="css/main.css"/>
     </h:head>
@@ -19,31 +19,31 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title text-center mb-4">Logowanie</h3>
+                            <h3 class="card-title text-center mb-4">#{msg['login.title']}</h3>
 
                             <h:form>
                                 <div class="mb-3">
-                                    <h:outputLabel for="username" value="Nazwa użytkownika:" styleClass="form-label"/>
+                                    <h:outputLabel for="username" value="#{msg['login.username']}" styleClass="form-label"/>
                                     <h:inputText id="username"
                                                  value="#{loginBean.username}"
                                                  styleClass="form-control"
                                                  required="true"
-                                                 requiredMessage="Nazwa użytkownika jest wymagana"/>
+                                                 requiredMessage="#{msg['login.username']}"/>
                                     <h:message for="username" styleClass="text-danger"/>
                                 </div>
 
                                 <div class="mb-3">
-                                    <h:outputLabel for="password" value="Hasło:" styleClass="form-label"/>
+                                    <h:outputLabel for="password" value="#{msg['login.password']}" styleClass="form-label"/>
                                     <h:inputSecret id="password"
                                                    value="#{loginBean.password}"
                                                    styleClass="form-control"
                                                    required="true"
-                                                   requiredMessage="Hasło jest wymagane"/>
+                                                   requiredMessage="#{msg['login.password']}"/>
                                     <h:message for="password" styleClass="text-danger"/>
                                 </div>
 
                                 <div class="d-grid gap-2">
-                                    <h:commandButton value="Zaloguj"
+                                    <h:commandButton value="#{msg['login.submit']}"
                                                      action="#{loginBean.login}"
                                                      styleClass="btn btn-primary"/>
                                 </div>
@@ -52,7 +52,7 @@
                             </h:form>
 
                             <div class="text-center mt-3">
-                                <h:link outcome="/index" value="Powrót do strony głównej" styleClass="text-muted"/>
+                                <h:link outcome="/index" value="#{msg['login.backToHome']}" styleClass="text-muted"/>
                             </div>
                         </div>
                     </div>

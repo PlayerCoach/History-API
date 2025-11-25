@@ -10,12 +10,12 @@
     </f:metadata>
 
     <ui:define name="title">
-        Detale notatki: #{noteDetailView.note.title}
+        #{msg['notes.detail.title']} #{noteDetailView.note.title}
     </ui:define>
 
     <ui:define name="content">
         <h:panelGroup rendered="#{noteDetailView.note == null}">
-            <h2>Notatka nie została znaleziona.</h2>
+            <h2>#{msg['notes.notFound']}</h2>
         </h:panelGroup>
 
         <h:panelGroup rendered="#{noteDetailView.note != null}">
@@ -23,31 +23,30 @@
             <hr/>
 
             <dl class="row">
-                <dt class="col-sm-3">ID Notatki:</dt>
+                <dt class="col-sm-3">#{msg['notes.detail.id']}</dt>
                 <dd class="col-sm-9">#{noteDetailView.note.id}</dd>
 
-
-                <dt class="col-sm-3">Dotyczy Postaci:</dt>
+                <dt class="col-sm-3">#{msg['notes.detail.figure']}</dt>
                 <dd class="col-sm-9">#{noteDetailView.figure.name}</dd>
 
-                <dt class="col-sm-3">Tryb:</dt>
+                <dt class="col-sm-3">#{msg['notes.detail.mode']}</dt>
                 <dd class="col-sm-9">#{noteDetailView.note.mode}</dd>
 
-                <dt class="col-sm-3">Treść:</dt>
+                <dt class="col-sm-3">#{msg['notes.detail.content']}</dt>
                 <dd class="col-sm-9"><pre style="white-space: pre-wrap;">#{noteDetailView.note.content}</pre></dd>
             </dl>
 
             <hr/>
             <div class="btn-group" role="group">
                 <h:link outcome="/historicalfigure/figure"
-                        value="Wróć do postaci (#{noteDetailView.figure.name})"
+                        value="#{msg['notes.detail.backToFigure'].replace('{0}', noteDetailView.figure.name)}"
                         styleClass="btn btn-secondary">
                     <f:param name="figureId" value="#{noteDetailView.figure.id}" />
                 </h:link>
 
                 <!-- Tylko właściciel lub admin może edytować -->
                 <h:link outcome="/note/note_edit"
-                        value="Edytuj"
+                        value="#{msg['notes.action.edit']}"
                         styleClass="btn btn-primary"
                         rendered="#{authBean.admin or (noteDetailView.note.createdBy != null and noteDetailView.note.createdBy.login eq authBean.username)}">
                     <f:param name="noteId" value="#{noteDetailView.note.id}" />

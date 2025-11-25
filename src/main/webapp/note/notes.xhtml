@@ -5,32 +5,32 @@
                 xmlns:f="jakarta.faces.core"
                 template="/WEB-INF/template/main.xhtml">
 
-    <ui:define name="title">Wszystkie Notatki</ui:define>
+    <ui:define name="title">#{msg['notes.list.title']}</ui:define>
 
     <ui:define name="content">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Wszystkie Notatki</h2>
+            <h2>#{msg['notes.list.title']}</h2>
 
             <h:link outcome="/note/note_edit" styleClass="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Dodaj nową notatkę
+                <i class="fas fa-plus me-2"></i> #{msg['notes.add']}
             </h:link>
         </div>
         <hr/>
         <h:dataTable value="#{noteListView.notes}" var="note" styleClass="table table-striped">
 
             <h:column>
-                <f:facet name="header">Tytuł Notatki</f:facet>
+                <f:facet name="header">#{msg['notes.column.title']}</f:facet>
                 <h:link outcome="/note/note" value="#{note.title}">
                     <f:param name="noteId" value="#{note.id}" />
                 </h:link>
             </h:column>
 
             <h:column>
-                <f:facet name="header">Akcje</f:facet>
+                <f:facet name="header">#{msg['notes.column.actions']}</f:facet>
                 <!-- Tylko właściciel lub admin może edytować notatkę -->
                 <h:link outcome="/note/note_edit"
-                        value="Edytuj"
+                        value="#{msg['notes.action.edit']}"
                         styleClass="btn btn-info btn-sm"
                         rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}">
                     <f:param name="noteId" value="#{note.id}" />

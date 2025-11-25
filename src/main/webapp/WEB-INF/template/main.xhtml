@@ -5,7 +5,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core">
-<f:view>
+<f:view locale="#{localeBean.locale}">
     <h:head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -20,8 +20,7 @@
 
         <style>
             .header-with-bg {
-
-                background-image: url(#{resource['default:images/background.png']});
+                background-image: url('#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}');
                 background-size: cover;
                 background-position: center;
                 padding: 40px 20px;
@@ -35,46 +34,57 @@
         <div class="container">
             <header class="mb-4 mt-4 header-with-bg" >
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1>HistoryAPI</h1>
-                    <div>
-                        <h:panelGroup rendered="#{authBean.loggedIn}">
-                            <span class="text-white me-3">
-                                Zalogowany: <strong>#{authBean.username}</strong>
-                                <h:outputText value=" (Administrator)" rendered="#{authBean.admin}" styleClass="badge bg-warning"/>
-                            </span>
-                            <h:form styleClass="d-inline">
-                                <h:commandButton value="Wyloguj"
-                                                action="#{loginBean.logout}"
-                                                styleClass="btn btn-light btn-sm"/>
-                            </h:form>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{!authBean.loggedIn}">
-                            <h:link outcome="/authentication/login"
-                                   value="Zaloguj się"
-                                   styleClass="btn btn-light btn-sm"/>
-                        </h:panelGroup>
+                    <h1>#{msg['app.header.title']}</h1>
+                    <div class="d-flex align-items-center">
+                        <!-- Language switcher -->
+                        <h:form styleClass="me-3">
+                            <h:commandLink action="#{localeBean.changeLanguage('pl')}" styleClass="text-white me-2">
+                                <h:outputText value="PL" />
+                            </h:commandLink>
+                            <span class="text-white">|</span>
+                            <h:commandLink action="#{localeBean.changeLanguage('en')}" styleClass="text-white ms-2">
+                                <h:outputText value="EN" />
+                            </h:commandLink>
+                        </h:form>
+
+                        <!-- Login/logout section -->
+                        <div>
+                            <h:panelGroup rendered="#{authBean.loggedIn}">
+                                <span class="text-white me-3">
+                                    #{msg['app.header.loggedAs']} <strong>#{authBean.username}</strong>
+                                    <h:outputText value=" (#{msg['app.header.administrator']})" rendered="#{authBean.admin}" styleClass="badge bg-warning"/>
+                                </span>
+                                <h:form styleClass="d-inline">
+                                    <h:commandButton value="#{msg['app.header.logout']}"
+                                                    action="#{loginBean.logout}"
+                                                    styleClass="btn btn-light btn-sm"/>
+                                </h:form>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{!authBean.loggedIn}">
+                                <h:link outcome="/authentication/login"
+                                       value="#{msg['app.header.login']}"
+                                       styleClass="btn btn-light btn-sm"/>
+                            </h:panelGroup>
+                        </div>
                     </div>
                 </div>
             </header>
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
                 <div class="container-fluid">
-
-
-
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                             <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/index">Start</h:link>
+                                <h:link styleClass="nav-link" outcome="/index">#{msg['nav.home']}</h:link>
                             </li>
 
                             <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/historicalfigure/figures">Postacie (Kategorie)</h:link>
+                                <h:link styleClass="nav-link" outcome="/historicalfigure/figures">#{msg['nav.figures']}</h:link>
                             </li>
 
                             <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/note/notes">Wszystkie Notatki</h:link>
+                                <h:link styleClass="nav-link" outcome="/note/notes">#{msg['nav.notes']}</h:link>
                             </li>
 
                         </ul>
@@ -88,9 +98,8 @@
 
             <footer class="text-center text-lg-start bg-light text-muted p-2">
                 <div class="text-center">
-                    Olaf Jedliński  - s193415
+                    #{msg['footer.author']}
                 </div>
-
             </footer>
         </div>
     </h:body>

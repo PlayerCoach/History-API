@@ -3,6 +3,7 @@ package pl.edu.pg.eti.kask.historyapi.note.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
+import pl.edu.pg.eti.kask.historyapi.interceptor.Logged;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.repository.NoteRepository;
 import pl.edu.pg.eti.kask.historyapi.user.entity.User;
@@ -44,14 +45,17 @@ public class NoteService {
         repository.deleteNotesWithHistoricalFigureId(historicalFigureId);
     }
 
+    @Logged
     public void delete(UUID id) {
         repository.delete(id);
     }
 
+    @Logged
     public void save(Note note) {
         repository.save(note);
     }
 
+    @Logged
     public void createNote(Note note, HistoricalFigure figure, User owner) {
         note.setId(UUID.randomUUID());
         note.setHistoricalFigure(figure);
