@@ -130,10 +130,10 @@ public class NoteEditView implements Serializable {
 
             if (currentUser == null || note.getCreatedBy() == null ||
                 !note.getCreatedBy().getId().equals(currentUser.getId())) {
-                // Brak dostępu - przekieruj na stronę błędu
+                // Brak dostępu - przekieruj na listę notatek
                 try {
-                    facesContext.getExternalContext().responseSendError(403, "Brak dostępu do edycji tej notatki");
-                    facesContext.responseComplete();
+                    String contextPath = facesContext.getExternalContext().getRequestContextPath();
+                    facesContext.getExternalContext().redirect(contextPath + "/note/notes.xhtml");
                 } catch (IOException e) {
                     facesContext.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
