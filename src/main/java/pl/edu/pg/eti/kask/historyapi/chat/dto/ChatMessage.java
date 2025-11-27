@@ -23,25 +23,15 @@ public class ChatMessage implements Serializable {
 
     private String content;
 
-    /**
-     * Czas wysłania wiadomości.
-     */
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
 
-    /**
-     * Czy wiadomość jest prywatna (do konkretnego użytkownika).
-     */
     private boolean privateMessage;
 
-    /**
-     * Sprawdza czy wiadomość jest przeznaczona dla danego użytkownika.
-     */
     public boolean isFor(String username) {
         if (!privateMessage) {
             return true; // Wiadomość publiczna - dla wszystkich
         }
-        // Wiadomość prywatna - tylko dla odbiorcy lub nadawcy
         return username.equals(recipient) || username.equals(sender);
     }
 }

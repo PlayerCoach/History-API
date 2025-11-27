@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.user.service;
 
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Stateless
+@LocalBean
 public class UserService {
 
     private UserRepository repository;

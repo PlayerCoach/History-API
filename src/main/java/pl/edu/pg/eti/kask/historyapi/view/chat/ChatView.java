@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.historyapi.view.chat;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.application.FacesMessage;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  */
 @Named
 @SessionScoped
+@SuppressWarnings({"CdiInjectionPointsInspection", "serial"})
 public class ChatView implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(ChatView.class.getName());
@@ -35,7 +37,7 @@ public class ChatView implements Serializable {
     @Inject
     private SecurityContext securityContext;
 
-    @Inject
+    @EJB
     private UserService userService;
 
     @Inject
