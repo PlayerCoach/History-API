@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  template="/WEB-INF/template/main.xhtml"
+>
+  <ui:define name="title">#{msg['chat.title']}</ui:define>
+
+  <ui:define name="content">
+    <h2>#{msg['chat.title']}</h2>
+    <hr />
+
+    <div class="row">
+      <!-- Panel czatu -->
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">#{msg['chat.messages']}</h5>
+          </div>
+          <div class="card-body">
+            <!-- Kontener wiadomości -->
+            <div
+              id="chatMessages"
+              class="chat-messages mb-3"
+              style="
+                height: 400px;
+                overflow-y: auto;
+                border: 1px solid #dee2e6;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #f8f9fa;
+              "
+            >
+              <p class="text-muted text-center">#{msg['chat.noMessages']}</p>
+            </div>
+
+            <!-- Formularz wysyłania wiadomości -->
+            <h:form id="chatForm">
+              <h:messages
+                id="chatFormMessages"
+                globalOnly="true"
+                styleClass="alert alert-danger"
+                role="alert"
+              />
+
+              <div class="row g-2">
+                <!-- Wybór odbiorcy -->
+                <div class="col-md-3">
+                  <label for="recipientSelect" class="form-label"
+                    >#{msg['chat.sendTo']}</label
+                  >
+                  <h:selectOneMenu
+                    id="recipientSelect"
+                    value="#{chatView.selectedRecipient}"
+                    styleClass="form-select"
+                  >
+                    <f:selectItem
+                      itemValue="ALL"
+                      itemLabel="#{msg['chat.everyone']}"
+                    />
+                    <f:selectItems
+                      value="#{chatView.allUsers}"
+                      var="user"
+                      itemValue="#{user.login}"
+                      itemLabel="#{user.login}"
+                    />
+                  </h:selectOneMenu>
+                </div>
+
+                <!-- Pole wiadomości -->
+                <div class="col-md-7">
+                  <label for="messageInput" class="form-label"
+                    >#{msg['chat.message']}</label
+                  >
+                  <h:inputText
+                    id="messageInput"
+                    value="#{chatView.messageContent}"
+                    styleClass="form-control"
+                    placeholder="#{msg['chat.placeholder']}"
+                    onkeypress="if(event.keyCode==13){document.getElementById('chatForm:sendBtn').click();return false;}"
+                  />
+                </div>
+
+                <!-- Przycisk wysyłania -->
+                <div class="col-md-2 d-flex align-items-end">
+                  <h:commandButton
+                    id="sendBtn"
+                    value="#{msg['chat.send']}"
+                    action="#{chatView.sendMessage}"
+                    styleClass="btn btn-primary w-100"
+                  >
+                    <f:ajax
+                      execute="@form"
+                      render="chatFormMessages recipientSelect messageInput"
+                    />
+                  </h:commandButton>
+                </div>
+              </div>
+            </h:form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel użytkowników online -->
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">#{msg['chat.onlineUsers']}</h5>
+          </div>
+          <div class="card-body">
+            <ul id="onlineUsersList" class="list-group">
+              <li class="list-group-item text-muted">
+                #{msg['chat.connecting']}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5 class="mb-0">#{msg['chat.status']}</h5>
+          </div>
+          <div class="card-body">
+            <p>
+              <strong>#{msg['chat.loggedAs']}:</strong>
+              #{chatView.currentUsername}
+            </p>
+            <p>
+              <strong>#{msg['chat.connectionStatus']}:</strong>
+              <span id="wsStatus" class="badge bg-warning"
+                >#{msg['chat.connecting']}</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skrypt WebSocket -->
+    <script type="text/javascript">
+      //<![CDATA[
+      var chatSocket;
+      var currentUsername = "#{chatView.currentUsername}";
+      var contextPath = "#{request.contextPath}";
+
+      // Inicjalizacja WebSocket po załadowaniu strony
+      document.addEventListener("DOMContentLoaded", function () {
+        connectWebSocket();
+      });
+
+      function connectWebSocket() {
+        var wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        var wsUrl =
+          wsProtocol +
+          "//" +
+          window.location.host +
+          contextPath +
+          "/chat-websocket?username=" +
+          encodeURIComponent(currentUsername);
+
+        console.log("Connecting to WebSocket: " + wsUrl);
+
+        try {
+          chatSocket = new WebSocket(wsUrl);
+
+          chatSocket.onopen = function (event) {
+            console.log("WebSocket connected");
+            document.getElementById("wsStatus").textContent =
+              '#{msg["chat.connected"]}';
+            document.getElementById("wsStatus").className = "badge bg-success";
+          };
+
+          chatSocket.onmessage = function (event) {
+            console.log("Received message: " + event.data);
+            var data = JSON.parse(event.data);
+
+            if (data.type === "userList") {
+              // Aktualizacja listy użytkowników online
+              updateOnlineUsers(data.users);
+            } else {
+              // Nowa wiadomość czatu
+              addChatMessage(data);
+            }
+          };
+
+          chatSocket.onclose = function (event) {
+            console.log("WebSocket disconnected");
+            document.getElementById("wsStatus").textContent =
+              '#{msg["chat.disconnected"]}';
+            document.getElementById("wsStatus").className = "badge bg-danger";
+
+            // Próba ponownego połączenia po 5 sekundach
+            setTimeout(connectWebSocket, 5000);
+          };
+
+          chatSocket.onerror = function (error) {
+            console.error("WebSocket error:", error);
+            document.getElementById("wsStatus").textContent =
+              '#{msg["chat.error"]}';
+            document.getElementById("wsStatus").className = "badge bg-danger";
+          };
+        } catch (e) {
+          console.error("Failed to create WebSocket:", e);
+        }
+      }
+
+      function addChatMessage(message) {
+        var messagesContainer = document.getElementById("chatMessages");
+
+        // Usuń placeholder jeśli istnieje
+        var placeholder = messagesContainer.querySelector(
+          ".text-muted.text-center"
+        );
+        if (placeholder) {
+          placeholder.remove();
+        }
+
+        var messageDiv = document.createElement("div");
+        messageDiv.className = "chat-message mb-2 p-2 rounded";
+
+        var isOwnMessage = message.sender === currentUsername;
+        var isPrivate = message.privateMessage;
+
+        if (isOwnMessage) {
+          messageDiv.className += " bg-primary text-white ms-auto";
+          messageDiv.style.maxWidth = "70%";
+          messageDiv.style.marginLeft = "auto";
+        } else if (isPrivate) {
+          messageDiv.className += " bg-warning";
+          messageDiv.style.maxWidth = "70%";
+        } else {
+          messageDiv.className += " bg-light";
+          messageDiv.style.maxWidth = "70%";
+        }
+
+        var senderInfo = "<strong>" + escapeHtml(message.sender) + "</strong>";
+        if (isPrivate) {
+          if (isOwnMessage) {
+            senderInfo +=
+              ' <span class="badge bg-dark">→ ' +
+              escapeHtml(message.recipient) +
+              "</span>";
+          } else {
+            senderInfo +=
+              ' <span class="badge bg-dark">#{msg["chat.privateMessage"]}</span>';
+          }
+        }
+
+        var timestamp = new Date(message.timestamp).toLocaleTimeString();
+
+        messageDiv.innerHTML =
+          '<div class="d-flex justify-content-between align-items-center">' +
+          "<small>" +
+          senderInfo +
+          "</small>" +
+          '<small class="text-muted">' +
+          timestamp +
+          "</small>" +
+          "</div>" +
+          "<div>" +
+          escapeHtml(message.content) +
+          "</div>";
+
+        messagesContainer.appendChild(messageDiv);
+
+        // Przewiń do najnowszej wiadomości
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function updateOnlineUsers(users) {
+        var usersList = document.getElementById("onlineUsersList");
+        usersList.innerHTML = "";
+
+        if (users && users.length > 0) {
+          users.forEach(function (user) {
+            var li = document.createElement("li");
+            li.className =
+              "list-group-item d-flex justify-content-between align-items-center";
+            li.innerHTML =
+              escapeHtml(user) +
+              (user === currentUsername
+                ? ' <span class="badge bg-primary">#{msg["chat.you"]}</span>'
+                : "") +
+              '<span class="badge bg-success rounded-pill">●</span>';
+            usersList.appendChild(li);
+          });
+        } else {
+          var li = document.createElement("li");
+          li.className = "list-group-item text-muted";
+          li.textContent = '#{msg["chat.noUsersOnline"]}';
+          usersList.appendChild(li);
+        }
+      }
+
+      function escapeHtml(text) {
+        var div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+      //]]>
+    </script>
+
+    <style>
+      .chat-messages::-webkit-scrollbar {
+        width: 8px;
+      }
+      .chat-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+      .chat-messages::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    </style>
+  </ui:define>
+</ui:composition>

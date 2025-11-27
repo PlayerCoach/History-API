@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core">
-<f:view locale="#{localeBean.locale}">
+<f:view locale="#{localeView.locale}">
     <h:head>
         <title>Test i18n</title>
         <style>
@@ -17,10 +17,10 @@
         <h1>Test Lokalizacji i Obrazka</h1>
 
         <div class="test-box">
-            <h2>Test 1: LocaleBean</h2>
-            <p>Język: <strong>#{localeBean.language}</strong></p>
-            <p>Locale: <strong>#{localeBean.locale}</strong></p>
-            <p>Obrazek: <strong>#{localeBean.backgroundImage}</strong></p>
+            <h2>Test 1: localeView</h2>
+            <p>Język: <strong>#{localeView.language}</strong></p>
+            <p>Locale: <strong>#{localeView.locale}</strong></p>
+            <p>Obrazek: <strong>#{localeView.backgroundImage}</strong></p>
         </div>
 
         <div class="test-box">
@@ -41,9 +41,9 @@
 
         <div class="test-box">
             <h2>Test 4: Obrazek tła</h2>
-            <p>URL: <strong>#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}</strong></p>
+            <p>URL: <strong>#{request.contextPath}/resources/default/images/#{localeView.backgroundImage}</strong></p>
             <div style="width: 300px; height: 200px;
-                        background-image: url('#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}');
+                        background-image: url('#{request.contextPath}/resources/default/images/#{localeView.backgroundImage}');
                         background-size: cover;">
             </div>
         </div>
@@ -51,8 +51,8 @@
         <div class="test-box">
             <h2>Zmiana języka</h2>
             <h:form>
-                <h:commandButton value="Polski" action="#{localeBean.changeLanguage('pl')}" />
-                <h:commandButton value="English" action="#{localeBean.changeLanguage('en')}" />
+                <h:commandButton value="Polski" action="#{localeView.changeLanguage('pl')}" />
+                <h:commandButton value="English" action="#{localeView.changeLanguage('en')}" />
             </h:form>
         </div>
 
@@ -60,4 +60,6 @@
     </h:body>
 </f:view>
 </html>
+
+
 

@@ -1,32 +1,31 @@
-package pl.edu.pg.eti.kask.historyapi.configuration;
+package pl.edu.pg.eti.kask.historyapi.view.configuration;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Locale;
 
+/**
+ * JSF View do obsługi lokalizacji językowej.
+ */
 @Named
 @SessionScoped
-public class LocaleBean implements Serializable {
+public class LocaleView implements Serializable {
 
     @Setter
     private Locale locale;
 
-    public LocaleBean() {
+    public LocaleView() {
         initLocale();
     }
 
     private void initLocale() {
-        // Ustaw domyślny język na podstawie przeglądarki
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null && context.getExternalContext() != null) {
             locale = context.getExternalContext().getRequestLocale();
-
-            // Jeśli język nie jest obsługiwany, użyj polskiego
             if (!isSupportedLocale(locale)) {
                 locale = new Locale("pl");
             }
@@ -55,7 +54,6 @@ public class LocaleBean implements Serializable {
     }
 
     public String getBackgroundImage() {
-        // Zwraca nazwę pliku tła w zależności od języka
         String lang = getLanguage();
         if ("pl".equals(lang)) {
             return "background_pl.png";
@@ -72,4 +70,3 @@ public class LocaleBean implements Serializable {
         return "pl".equals(lang) || "en".equals(lang);
     }
 }
-

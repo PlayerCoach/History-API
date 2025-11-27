@@ -42,7 +42,7 @@
                     <h:commandButton value="#{msg['figures.action.delete']}"
                                      action="#{figureListView.deleteFigure(fig.id)}"
                                      styleClass="btn btn-danger btn-sm ms-2"
-                                     rendered="#{authBean.admin}"
+                                     rendered="#{authView.admin}"
                                      onclick="return confirm('#{msg['figures.delete.confirm'].replace('{0}', fig.name)}');">
                         <f:ajax execute="@this" render="figuresTable messages"/>
                     </h:commandButton>
@@ -52,3 +52,4 @@
         </h:form>
     </ui:define>
 </ui:composition>
+

@@ -1,108 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core">
-<f:view locale="#{localeBean.locale}">
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+>
+  <f:view locale="#{localeView.locale}">
     <h:head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>
-            <ui:insert name="title">HistoryAPI</ui:insert>
-        </title>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title><ui:insert name="title">HistoryAPI</ui:insert></title>
 
-        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
-        <h:outputStylesheet library="default" name="css/main.css"/>
-        <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js"/>
-        <h:outputScript library="mdb" name="js/main.js" target="body"/>
+      <h:outputStylesheet
+        library="webjars"
+        name="mdb-ui-kit/6.4.0/css/mdb.min.css"
+      />
+      <h:outputStylesheet library="default" name="css/main.css" />
+      <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js" />
+      <h:outputScript library="mdb" name="js/main.js" target="body" />
 
-        <style>
-            .header-with-bg {
-                background-image: url('#{request.contextPath}/resources/default/images/#{localeBean.backgroundImage}');
-                background-size: cover;
-                background-position: center;
-                padding: 40px 20px;
-                color: white;
-                text-shadow: 2px 2px 4px #000;
-            }
-        </style>
+      <style>
+        .header-with-bg {
+          background-image: url("#{request.contextPath}/resources/default/images/#{localeView.backgroundImage}");
+          background-size: cover;
+          background-position: center;
+          padding: 40px 20px;
+          color: white;
+          text-shadow: 2px 2px 4px #000;
+        }
+      </style>
     </h:head>
 
     <h:body>
-        <div class="container">
-            <header class="mb-4 mt-4 header-with-bg" >
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1>#{msg['app.header.title']}</h1>
-                    <div class="d-flex align-items-center">
-                        <!-- Language switcher -->
-                        <h:form styleClass="me-3">
-                            <h:commandLink action="#{localeBean.changeLanguage('pl')}" styleClass="text-white me-2">
-                                <h:outputText value="PL" />
-                            </h:commandLink>
-                            <span class="text-white">|</span>
-                            <h:commandLink action="#{localeBean.changeLanguage('en')}" styleClass="text-white ms-2">
-                                <h:outputText value="EN" />
-                            </h:commandLink>
-                        </h:form>
+      <div class="container">
+        <header class="mb-4 mt-4 header-with-bg">
+          <div class="d-flex justify-content-between align-items-center">
+            <h1>#{msg['app.header.title']}</h1>
+            <div class="d-flex align-items-center">
+              <!-- Language switcher -->
+              <h:form styleClass="me-3">
+                <h:commandLink
+                  action="#{localeView.changeLanguage('pl')}"
+                  styleClass="text-white me-2"
+                >
+                  <h:outputText value="PL" />
+                </h:commandLink>
+                <span class="text-white">|</span>
+                <h:commandLink
+                  action="#{localeView.changeLanguage('en')}"
+                  styleClass="text-white ms-2"
+                >
+                  <h:outputText value="EN" />
+                </h:commandLink>
+              </h:form>
 
-                        <!-- Login/logout section -->
-                        <div>
-                            <h:panelGroup rendered="#{authBean.loggedIn}">
-                                <span class="text-white me-3">
-                                    #{msg['app.header.loggedAs']} <strong>#{authBean.username}</strong>
-                                    <h:outputText value=" (#{msg['app.header.administrator']})" rendered="#{authBean.admin}" styleClass="badge bg-warning"/>
-                                </span>
-                                <h:form styleClass="d-inline">
-                                    <h:commandButton value="#{msg['app.header.logout']}"
-                                                    action="#{loginBean.logout}"
-                                                    styleClass="btn btn-light btn-sm"/>
-                                </h:form>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{!authBean.loggedIn}">
-                                <h:link outcome="/authentication/login"
-                                       value="#{msg['app.header.login']}"
-                                       styleClass="btn btn-light btn-sm"/>
-                            </h:panelGroup>
-                        </div>
-                    </div>
-                </div>
-            </header>
+              <!-- Login/logout section -->
+              <div>
+                <h:panelGroup rendered="#{authView.loggedIn}">
+                  <span class="text-white me-3">
+                    #{msg['app.header.loggedAs']}
+                    <strong>#{authView.username}</strong>
+                    <h:outputText
+                      value=" (#{msg['app.header.administrator']})"
+                      rendered="#{authView.admin}"
+                      styleClass="badge bg-warning"
+                    />
+                  </span>
+                  <h:form styleClass="d-inline">
+                    <h:commandButton
+                      value="#{msg['app.header.logout']}"
+                      action="#{loginView.logout}"
+                      styleClass="btn btn-light btn-sm"
+                    />
+                  </h:form>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{!authView.loggedIn}">
+                  <h:link
+                    outcome="/authentication/login"
+                    value="#{msg['app.header.login']}"
+                    styleClass="btn btn-light btn-sm"
+                  />
+                </h:panelGroup>
+              </div>
+            </div>
+          </div>
+        </header>
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <h:link styleClass="nav-link" outcome="/index"
+                    >#{msg['nav.home']}</h:link
+                  >
+                </li>
 
-                            <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/index">#{msg['nav.home']}</h:link>
-                            </li>
+                <li class="nav-item">
+                  <h:link
+                    styleClass="nav-link"
+                    outcome="/historicalfigure/figures"
+                    >#{msg['nav.figures']}</h:link
+                  >
+                </li>
 
-                            <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/historicalfigure/figures">#{msg['nav.figures']}</h:link>
-                            </li>
+                <li class="nav-item">
+                  <h:link styleClass="nav-link" outcome="/note/notes"
+                    >#{msg['nav.notes']}</h:link
+                  >
+                </li>
 
-                            <li class="nav-item">
-                                <h:link styleClass="nav-link" outcome="/note/notes">#{msg['nav.notes']}</h:link>
-                            </li>
+                <h:panelGroup rendered="#{authView.loggedIn}">
+                  <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="/chat/chat"
+                      >#{msg['nav.chat']}</h:link
+                    >
+                  </li>
+                </h:panelGroup>
+              </ul>
+            </div>
+          </div>
+        </nav>
 
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+        <main class="mb-4 mt-4">
+          <ui:insert name="content" />
+        </main>
 
-            <main class="mb-4 mt-4">
-                <ui:insert name="content"/>
-            </main>
-
-            <footer class="text-center text-lg-start bg-light text-muted p-2">
-                <div class="text-center">
-                    #{msg['footer.author']}
-                </div>
-            </footer>
-        </div>
+        <footer class="text-center text-lg-start bg-light text-muted p-2">
+          <div class="text-center">#{msg['footer.author']}</div>
+        </footer>
+      </div>
     </h:body>
-</f:view>
+  </f:view>
 </html>
-

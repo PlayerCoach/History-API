@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.historyapi.security;
+package pl.edu.pg.eti.kask.historyapi.view.security;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -9,9 +9,12 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.security.Principal;
 
+/**
+ * JSF View do sprawdzania autoryzacji użytkownika.
+ */
 @Named
 @RequestScoped
-public class AuthBean implements Serializable {
+public class AuthView implements Serializable {
 
     @Inject
     private SecurityContext securityContext;
@@ -40,4 +43,3 @@ public class AuthBean implements Serializable {
         return securityContext.isCallerInRole(role);
     }
 }
-

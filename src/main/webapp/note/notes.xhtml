@@ -32,7 +32,7 @@
                 <h:link outcome="/note/note_edit"
                         value="#{msg['notes.action.edit']}"
                         styleClass="btn btn-info btn-sm"
-                        rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}">
+                        rendered="#{authView.admin or (note.createdBy != null and note.createdBy.login eq authView.username)}">
                     <f:param name="noteId" value="#{note.id}" />
                 </h:link>
             </h:column>
@@ -40,3 +40,4 @@
 
     </ui:define>
 </ui:composition>
+

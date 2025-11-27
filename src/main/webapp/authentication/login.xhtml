@@ -25,7 +25,7 @@
                                 <div class="mb-3">
                                     <h:outputLabel for="username" value="#{msg['login.username']}" styleClass="form-label"/>
                                     <h:inputText id="username"
-                                                 value="#{loginBean.username}"
+                                                 value="#{loginView.username}"
                                                  styleClass="form-control"
                                                  required="true"
                                                  requiredMessage="#{msg['login.username']}"/>
@@ -35,7 +35,7 @@
                                 <div class="mb-3">
                                     <h:outputLabel for="password" value="#{msg['login.password']}" styleClass="form-label"/>
                                     <h:inputSecret id="password"
-                                                   value="#{loginBean.password}"
+                                                   value="#{loginView.password}"
                                                    styleClass="form-control"
                                                    required="true"
                                                    requiredMessage="#{msg['login.password']}"/>
@@ -44,7 +44,7 @@
 
                                 <div class="d-grid gap-2">
                                     <h:commandButton value="#{msg['login.submit']}"
-                                                     action="#{loginBean.login}"
+                                                     action="#{loginView.login}"
                                                      styleClass="btn btn-primary"/>
                                 </div>
 
@@ -62,4 +62,6 @@
     </h:body>
 </f:view>
 </html>
+
+
 

@@ -48,7 +48,7 @@
                 <h:link outcome="/note/note_edit"
                         value="#{msg['notes.action.edit']}"
                         styleClass="btn btn-primary"
-                        rendered="#{authBean.admin or (noteDetailView.note.createdBy != null and noteDetailView.note.createdBy.login eq authBean.username)}">
+                        rendered="#{authView.admin or (noteDetailView.note.createdBy != null and noteDetailView.note.createdBy.login eq authView.username)}">
                     <f:param name="noteId" value="#{noteDetailView.note.id}" />
                 </h:link>
             </div>
@@ -56,3 +56,4 @@
         </h:panelGroup>
     </ui:define>
 </ui:composition>
+

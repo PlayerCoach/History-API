@@ -7,13 +7,21 @@ import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 /**
- * Configuration class for security context.
- * Uses CustomFormAuthenticationMechanismDefinition for JSF pages.
- * REST API endpoints will use Basic Auth via custom filter/interceptor.
+ * Konfiguracja bezpieczeństwa aplikacji.
+ * 
+ * UWAGA: Aplikacja używa CustomFormAuthenticationMechanismDefinition, które działa
+ * tylko z widokami JSF (formularz logowania). REST API endpoints (/api/*) są 
+ * zabezpieczone tym samym mechanizmem, co oznacza, że:
+ * - Próba dostępu do REST API bez sesji przekieruje na formularz logowania HTML
+ * - REST API NIE obsługuje Basic Authentication
+ * - Aby korzystać z REST API, należy najpierw zalogować się przez JSF lub
+ *   zaimplementować osobny mechanizm autentykacji (np. JWT, OAuth2)
+ * 
+ * Dla pełnej obsługi REST API z Basic Auth wymagana byłaby osobna konfiguracja
+ * lub użycie @BasicAuthenticationMechanismDefinition zamiast form-auth,
+ * co jednak uniemożliwiłoby logowanie przez formularz JSF.
  */
 @ApplicationScoped
-// BasicAuth is commented out - we'll handle it separately for REST endpoints
-//@BasicAuthenticationMechanismDefinition(realmName = "history-api-realm")
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
                 loginPage = "/authentication/login.xhtml",

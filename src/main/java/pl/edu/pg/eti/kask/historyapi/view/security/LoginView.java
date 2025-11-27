@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.historyapi.security;
+package pl.edu.pg.eti.kask.historyapi.view.security;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
@@ -18,9 +18,12 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * JSF View do obsługi logowania i wylogowania.
+ */
 @Named
 @RequestScoped
-public class LoginBean implements Serializable {
+public class LoginView implements Serializable {
 
     @Inject
     private SecurityContext securityContext;
@@ -69,4 +72,3 @@ public class LoginBean implements Serializable {
         return "/index.xhtml?faces-redirect=true";
     }
 }
-

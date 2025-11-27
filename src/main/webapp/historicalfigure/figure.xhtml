@@ -56,14 +56,14 @@
                         <h:commandButton value="#{msg['notes.action.delete']}"
                                          action="#{figureDetailView.deleteNote(note.id)}"
                                          styleClass="btn btn-warning btn-sm action-button"
-                                         rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}"
+                                         rendered="#{authView.admin or (note.createdBy != null and note.createdBy.login eq authView.username)}"
                                          onclick="return confirm('#{msg['notes.delete.confirm'].replace('{0}', note.title)}');">
                             <f:ajax execute="@this" render="notesTable noteMessages"/>
                         </h:commandButton>
                         <h:link outcome="/note/note_edit"
                                 value="#{msg['notes.action.edit']}"
                                 styleClass="btn btn-info btn-sm action-button"
-                                rendered="#{authBean.admin or (note.createdBy != null and note.createdBy.login eq authBean.username)}">
+                                rendered="#{authView.admin or (note.createdBy != null and note.createdBy.login eq authView.username)}">
                             <f:param name="noteId" value="#{note.id}" />
                         </h:link>
                     </h:column>
@@ -74,3 +74,4 @@
         </h:panelGroup>
     </ui:define>
 </ui:composition>
+
