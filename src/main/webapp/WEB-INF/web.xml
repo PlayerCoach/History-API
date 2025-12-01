@@ -109,9 +109,4 @@
         <location>/error/404.xhtml</location>
     </error-page>
 
-    <error-page>
-        <exception-type>jakarta.faces.application.ViewExpiredException</exception-type>
-        <location>/note/notes.xhtml</location>
-    </error-page>
-
 </web-app>
