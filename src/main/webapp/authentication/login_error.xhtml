@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="pl"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
-<f:view>
+<html
+  lang="pl"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:f="jakarta.faces.core"
+>
+  <f:view locale="pl">
     <h:head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Błąd logowania - HistoryAPI</title>
-        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
-        <h:outputStylesheet library="default" name="css/main.css"/>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Błąd logowania - HistoryAPI</title>
+      <h:outputStylesheet
+        library="webjars"
+        name="mdb-ui-kit/6.4.0/css/mdb.min.css"
+      />
+      <h:outputStylesheet library="default" name="css/main.css" />
     </h:head>
 
     <h:body>
-        <div class="container">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title text-center mb-4 text-danger">#{msg['login.error.title']}</h3>
+      <div class="container">
+        <div class="row justify-content-center mt-5">
+          <div class="col-md-6 col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title text-center mb-4 text-danger">
+                  #{msg['login.error.title']}
+                </h3>
 
-                            <div class="alert alert-danger" role="alert">
-                                <strong>#{msg['login.error.message']}</strong><br/>
-                                #{msg['login.error.description']}
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <h:link outcome="/authentication/login"
-                                        value="#{msg['login.error.tryAgain']}"
-                                        styleClass="btn btn-primary"/>
-                            </div>
-
-                            <div class="text-center mt-3">
-                                <h:link outcome="/index" value="#{msg['login.backToHome']}" styleClass="text-muted"/>
-                            </div>
-                        </div>
-                    </div>
+                <div class="alert alert-danger" role="alert">
+                  <strong>#{msg['login.error.message']}</strong><br />
+                  #{msg['login.error.description']}
                 </div>
-            </div>
-        </div>
-    </h:body>
-</f:view>
-</html>
 
+                <div class="d-grid gap-2">
+                  <h:link
+                    outcome="/authentication/login"
+                    value="#{msg['login.error.tryAgain']}"
+                    styleClass="btn btn-primary"
+                  />
+                </div>
+
+                <div class="text-center mt-3">
+                  <h:link
+                    outcome="/index"
+                    value="#{msg['login.backToHome']}"
+                    styleClass="text-muted"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </h:body>
+  </f:view>
+</html>

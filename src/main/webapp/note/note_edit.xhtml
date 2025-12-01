@@ -1,76 +1,206 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets"
-                xmlns:f="jakarta.faces.core"
-                template="/WEB-INF/template/main.xhtml">
+<ui:composition
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  template="/WEB-INF/template/main.xhtml"
+>
+  <f:metadata>
+    <f:viewParam name="noteId" value="#{noteEditView.noteId}" />
+    <f:viewParam name="figureId" value="#{noteEditView.figureId}" />
 
-    <f:metadata>
-        <f:viewParam name="noteId" value="#{noteEditView.noteId}" />
-        <f:viewParam name="figureId" value="#{noteEditView.figureId}" />
+    <f:viewAction action="#{noteEditView.loadData}" />
+  </f:metadata>
 
-        <f:viewAction action="#{noteEditView.loadData}" />
-    </f:metadata>
+  <ui:define name="title"
+    >#{noteEditView.noteId == null ? msg['notes.edit.title.new'] :
+    msg['notes.edit.title.edit']}</ui:define
+  >
 
-    <ui:define name="title">#{noteEditView.noteId == null ? msg['notes.edit.title.new'] : msg['notes.edit.title.edit']}</ui:define>
+  <ui:define name="content">
+    <h2>
+      #{noteEditView.noteId == null ? msg['notes.edit.title.new'] :
+      msg['notes.edit.title.edit']}
+    </h2>
+    <hr />
 
-    <ui:define name="content">
-        <h2>#{noteEditView.noteId == null ? msg['notes.edit.title.new'] : msg['notes.edit.title.edit']}</h2>
-        <hr/>
+    <!-- Sekcja konfliktu wersji -->
+    <h:panelGroup rendered="#{noteEditView.versionConflict}">
+      <div class="alert alert-danger mb-4" role="alert">
+        <h4 class="alert-heading">#{msg['notes.edit.conflict']}</h4>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h5>#{msg['notes.edit.conflict.current']}</h5>
+            <p>
+              <strong>#{msg['notes.edit.field.title']}:</strong>
+              #{noteEditView.currentDatabaseNote.title}
+            </p>
+            <p>
+              <strong>#{msg['notes.edit.field.content']}:</strong>
+              #{noteEditView.currentDatabaseNote.content}
+            </p>
+            <p>
+              <strong>#{msg['notes.edit.field.mode']}:</strong>
+              #{noteEditView.currentDatabaseNote.mode}
+            </p>
+            <p>
+              <strong>#{msg['notes.column.version']}:</strong>
+              #{noteEditView.currentDatabaseNote.version}
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h5>#{msg['notes.edit.conflict.your']}</h5>
+            <p>
+              <strong>#{msg['notes.edit.field.title']}:</strong>
+              #{noteEditView.userEnteredNote.title}
+            </p>
+            <p>
+              <strong>#{msg['notes.edit.field.content']}:</strong>
+              #{noteEditView.userEnteredNote.content}
+            </p>
+            <p>
+              <strong>#{msg['notes.edit.field.mode']}:</strong>
+              #{noteEditView.userEnteredNote.mode}
+            </p>
+            <p>
+              <strong>#{msg['notes.column.version']}:</strong>
+              #{noteEditView.userEnteredNote.version}
+            </p>
+          </div>
+        </div>
+        <hr />
+        <h:form styleClass="d-inline">
+          <h:commandButton
+            value="#{msg['notes.edit.conflict.acceptCurrent']}"
+            action="#{noteEditView.acceptCurrentVersion}"
+            styleClass="btn btn-secondary me-2"
+          />
+          <h:commandButton
+            value="#{msg['notes.edit.conflict.retryMine']}"
+            action="#{noteEditView.retryWithUserData}"
+            styleClass="btn btn-primary"
+          />
+        </h:form>
+      </div>
+    </h:panelGroup>
 
-        <h:panelGroup rendered="#{noteEditView.note != null}">
-            <h:form id="noteForm" styleClass="col-md-6">
+    <h:panelGroup
+      rendered="#{noteEditView.note != null and not noteEditView.versionConflict}"
+    >
+      <h:form id="noteForm" styleClass="col-md-6">
+        <!-- Ukryte pola dla optimistic locking -->
+        <h:inputHidden value="#{noteEditView.note.id}" />
+        <h:inputHidden value="#{noteEditView.note.version}" />
 
-                <div class="form-outline mb-4">
-                    <h:inputText id="title" value="#{noteEditView.note.title}" styleClass="form-control"
-                                 required="true"
-                                 requiredMessage="#{msg['notes.edit.required.title']}" />
-                    <h:outputLabel for="title" styleClass="form-label">#{msg['notes.edit.field.title']}</h:outputLabel>
-                    <h:message for="title" styleClass="text-danger" />
-                </div>
+        <!-- Ukryta h:messages żeby MyFaces nie wyświetlał błędów na dole strony -->
+        <h:messages rendered="false" />
 
-                <div class="form-outline mb-4">
-                    <h:inputTextarea id="content" value="#{noteEditView.note.content}" styleClass="form-control" rows="5"
-                                     required="true"
-                                     requiredMessage="#{msg['notes.edit.required.content']}" />
-                    <h:outputLabel for="content" styleClass="form-label">#{msg['notes.edit.field.content']}</h:outputLabel>
-                    <h:message for="content" styleClass="text-danger" />
-                </div>
-
-                <div class="mb-4">
-                    <label for="mode" class="form-label">#{msg['notes.edit.field.mode']}</label>
-                    <h:selectOneMenu id="mode" value="#{noteEditView.note.mode}" styleClass="form-select">
-                        <f:selectItems value="#{noteEditView.modes}" var="m"
-                                       itemLabel="#{m.name()}" itemValue="#{m}" />
-                    </h:selectOneMenu>
-                </div>
-
-                <div class="mb-4">
-                    <label for="figureSelect" class="form-label">#{msg['notes.edit.field.figure']}</label>
-                    <h:selectOneMenu id="figureSelect"
-                                     value="#{noteEditView.note.historicalFigure}"
-                                     styleClass="form-select" required="true"
-                                     converter="historicalFigureConverter">
-                        <f:facet name="prompt">#{msg['notes.edit.field.figure.prompt']}</f:facet>
-                        <f:selectItems value="#{noteEditView.availableFigures}"
-                                       var="fig"
-                                       itemLabel="#{fig.name}"
-                                       itemValue="#{fig}" />
-                    </h:selectOneMenu>
-                </div>
-
-                <h:commandButton value="#{msg['notes.edit.action.save']}" action="#{noteEditView.save}" styleClass="btn btn-primary" />
-
-                <h:link outcome="/note/notes" value="#{msg['notes.edit.action.cancel']}" styleClass="btn btn-link" />
-
-            </h:form>
+        <!-- Błędy walidacji Bean Validation -->
+        <h:panelGroup rendered="#{facesContext.messageList.size() > 0}">
+          <div class="alert alert-danger mb-4" role="alert">
+            <ul class="mb-0 list-unstyled">
+              <ui:repeat value="#{facesContext.messageList}" var="m">
+                <li>
+                  <h:outputText
+                    value="#{m.summary.contains(':') ? m.summary.substring(m.summary.lastIndexOf(':') + 2) : m.summary}"
+                  />
+                </li>
+              </ui:repeat>
+            </ul>
+          </div>
         </h:panelGroup>
 
-        <h:panelGroup rendered="#{noteEditView.note == null and noteEditView.noteId != null}">
-            <div class="alert alert-danger" role="alert">
-                #{msg['notes.edit.notFound']}
-            </div>
-        </h:panelGroup>
+        <div class="mb-4">
+          <h:outputLabel for="title" styleClass="form-label"
+            >#{msg['notes.edit.field.title']}</h:outputLabel
+          >
+          <h:inputText
+            id="title"
+            value="#{noteEditView.note.title}"
+            styleClass="form-control"
+          >
+            <f:validateBean />
+          </h:inputText>
+        </div>
 
-    </ui:define>
+        <div class="mb-4">
+          <h:outputLabel for="content" styleClass="form-label"
+            >#{msg['notes.edit.field.content']}</h:outputLabel
+          >
+          <h:inputTextarea
+            id="content"
+            value="#{noteEditView.note.content}"
+            styleClass="form-control"
+            rows="5"
+          >
+            <f:validateBean />
+          </h:inputTextarea>
+        </div>
+
+        <div class="mb-4">
+          <h:outputLabel for="mode" styleClass="form-label"
+            >#{msg['notes.edit.field.mode']}</h:outputLabel
+          >
+          <h:selectOneMenu
+            id="mode"
+            value="#{noteEditView.note.mode}"
+            styleClass="form-select"
+          >
+            <f:validateBean />
+            <f:selectItems
+              value="#{noteEditView.modes}"
+              var="m"
+              itemLabel="#{m.name()}"
+              itemValue="#{m}"
+            />
+          </h:selectOneMenu>
+        </div>
+
+        <div class="mb-4">
+          <h:outputLabel for="figureSelect" styleClass="form-label"
+            >#{msg['notes.edit.field.figure']}</h:outputLabel
+          >
+          <h:selectOneMenu
+            id="figureSelect"
+            value="#{noteEditView.note.historicalFigure}"
+            styleClass="form-select"
+            converter="historicalFigureConverter"
+          >
+            <f:selectItem
+              itemLabel="#{msg['notes.edit.field.figure.prompt']}"
+              noSelectionOption="true"
+            />
+            <f:selectItems
+              value="#{noteEditView.availableFigures}"
+              var="fig"
+              itemLabel="#{fig.name}"
+              itemValue="#{fig}"
+            />
+          </h:selectOneMenu>
+        </div>
+
+        <h:commandButton
+          value="#{msg['notes.edit.action.save']}"
+          action="#{noteEditView.save}"
+          styleClass="btn btn-primary"
+        />
+
+        <h:link
+          outcome="/note/notes"
+          value="#{msg['notes.edit.action.cancel']}"
+          styleClass="btn btn-link"
+        />
+      </h:form>
+    </h:panelGroup>
+
+    <h:panelGroup
+      rendered="#{noteEditView.note == null and noteEditView.noteId != null}"
+    >
+      <div class="alert alert-danger" role="alert">
+        #{msg['notes.edit.notFound']}
+      </div>
+    </h:panelGroup>
+  </ui:define>
 </ui:composition>

@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 import pl.edu.pg.eti.kask.historyapi.interceptor.Logged;
+import pl.edu.pg.eti.kask.historyapi.note.entity.Mode;
 import pl.edu.pg.eti.kask.historyapi.note.entity.Note;
 import pl.edu.pg.eti.kask.historyapi.note.repository.NoteRepository;
 import pl.edu.pg.eti.kask.historyapi.user.entity.User;
@@ -22,6 +23,10 @@ public class NoteService {
 
     public List<Note> findAll() {
         return repository.findAll();
+    }
+
+    public List<Note> findWithFilters(String title, String content, Mode mode, String ownerLogin) {
+        return repository.findWithFilters(title, content, mode, ownerLogin);
     }
 
     public Optional<Note> findById(UUID id) {

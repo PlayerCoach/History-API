@@ -1,43 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets"
-                xmlns:f="jakarta.faces.core"
-                template="/WEB-INF/template/main.xhtml">
+<ui:composition
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="jakarta.faces.html"
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  template="/WEB-INF/template/main.xhtml"
+>
+  <ui:define name="title">#{msg['notes.list.title']}</ui:define>
 
-    <ui:define name="title">#{msg['notes.list.title']}</ui:define>
+  <ui:define name="content">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>#{msg['notes.list.title']}</h2>
 
-    <ui:define name="content">
+      <h:link outcome="/note/note_edit" styleClass="btn btn-success">
+        <i class="fas fa-plus me-2"></i> #{msg['notes.add']}
+      </h:link>
+    </div>
+    <hr />
 
-        <div class="d-flex justify-content-between align-items-center">
-            <h2>#{msg['notes.list.title']}</h2>
-
-            <h:link outcome="/note/note_edit" styleClass="btn btn-success">
-                <i class="fas fa-plus me-2"></i> #{msg['notes.add']}
-            </h:link>
+    <!-- Formularz filtrowania -->
+    <h:form id="filterForm" styleClass="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">#{msg['notes.filter.title']}</h5>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">#{msg['notes.column.title']}</label>
+            <h:inputText
+              value="#{noteListView.filterTitle}"
+              styleClass="form-control"
+            />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">#{msg['notes.edit.field.content']}</label>
+            <h:inputText
+              value="#{noteListView.filterContent}"
+              styleClass="form-control"
+            />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">#{msg['notes.edit.field.mode']}</label>
+            <h:selectOneMenu
+              value="#{noteListView.filterMode}"
+              styleClass="form-select"
+            >
+              <f:selectItem
+                itemLabel="#{msg['notes.filter.allModes']}"
+                noSelectionOption="true"
+              />
+              <f:selectItems
+                value="#{noteListView.modes}"
+                var="m"
+                itemLabel="#{m.name()}"
+                itemValue="#{m}"
+              />
+            </h:selectOneMenu>
+          </div>
+          <div class="col-md-3 d-flex align-items-end gap-2">
+            <h:commandButton
+              value="#{msg['notes.filter.apply']}"
+              action="#{noteListView.filter}"
+              styleClass="btn btn-primary"
+            />
+            <h:commandButton
+              value="#{msg['notes.filter.clear']}"
+              action="#{noteListView.clearFilters}"
+              styleClass="btn btn-secondary"
+            />
+          </div>
         </div>
-        <hr/>
-        <h:dataTable value="#{noteListView.notes}" var="note" styleClass="table table-striped">
+      </div>
+    </h:form>
 
-            <h:column>
-                <f:facet name="header">#{msg['notes.column.title']}</f:facet>
-                <h:link outcome="/note/note" value="#{note.title}">
-                    <f:param name="noteId" value="#{note.id}" />
-                </h:link>
-            </h:column>
+    <h:dataTable
+      value="#{noteListView.notes}"
+      var="note"
+      styleClass="table table-striped"
+    >
+      <h:column>
+        <f:facet name="header">#{msg['notes.column.title']}</f:facet>
+        <h:link outcome="/note/note" value="#{note.title}">
+          <f:param name="noteId" value="#{note.id}" />
+        </h:link>
+      </h:column>
 
-            <h:column>
-                <f:facet name="header">#{msg['notes.column.actions']}</f:facet>
-                <!-- Tylko właściciel lub admin może edytować notatkę -->
-                <h:link outcome="/note/note_edit"
-                        value="#{msg['notes.action.edit']}"
-                        styleClass="btn btn-info btn-sm"
-                        rendered="#{authView.admin or (note.createdBy != null and note.createdBy.login eq authView.username)}">
-                    <f:param name="noteId" value="#{note.id}" />
-                </h:link>
-            </h:column>
-        </h:dataTable>
+      <h:column>
+        <f:facet name="header">#{msg['notes.column.version']}</f:facet>
+        #{note.version}
+      </h:column>
 
-    </ui:define>
+      <h:column>
+        <f:facet name="header">#{msg['notes.column.createdAt']}</f:facet>
+        <h:outputText value="#{note.createdAt}">
+          <f:convertDateTime pattern="yyyy-MM-dd HH:mm" type="localDateTime" />
+        </h:outputText>
+      </h:column>
+
+      <h:column>
+        <f:facet name="header">#{msg['notes.column.updatedAt']}</f:facet>
+        <h:outputText value="#{note.updatedAt}">
+          <f:convertDateTime pattern="yyyy-MM-dd HH:mm" type="localDateTime" />
+        </h:outputText>
+      </h:column>
+
+      <h:column>
+        <f:facet name="header">#{msg['notes.column.actions']}</f:facet>
+        <!-- Tylko właściciel lub admin może edytować notatkę -->
+        <h:link
+          outcome="/note/note_edit"
+          value="#{msg['notes.action.edit']}"
+          styleClass="btn btn-info btn-sm"
+          rendered="#{authView.admin or (note.createdBy != null and note.createdBy.login eq authView.username)}"
+        >
+          <f:param name="noteId" value="#{note.id}" />
+        </h:link>
+      </h:column>
+    </h:dataTable>
+  </ui:define>
 </ui:composition>
-

@@ -1,11 +1,12 @@
 package pl.edu.pg.eti.kask.historyapi.view.note;
 
-import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJBException;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.security.enterprise.SecurityContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,20 +27,19 @@ import java.util.UUID;
 @ViewScoped
 public class NoteEditView implements Serializable {
 
-    @Inject
-    private NoteService noteService;
+    private static final long serialVersionUID = 1L;
 
     @Inject
-    private HistoricalFigureService figureService;
+    private transient NoteService noteService;
 
     @Inject
-    private UserService userService;
+    private transient HistoricalFigureService figureService;
 
     @Inject
-    private SecurityContext securityContext;
+    private transient UserService userService;
 
     @Inject
-    private FacesContext facesContext;
+    private transient SecurityContext securityContext;
 
     @Getter
     @Setter
@@ -52,12 +52,25 @@ public class NoteEditView implements Serializable {
     @Getter
     private Note note;
 
-    private List<HistoricalFigure> availableFigures;
+    /**
+     * Aktualna wersja z bazy (pokazywana przy konflikcie)
+     */
+    @Getter
+    private Note currentDatabaseNote;
 
-    @PostConstruct
-    public void init() {
-        loadData();
-    }
+    /**
+     * Dane wprowadzone przez użytkownika (pokazywane przy konflikcie)
+     */
+    @Getter
+    private Note userEnteredNote;
+
+    /**
+     * Flaga oznaczająca wystąpienie konfliktu wersji
+     */
+    @Getter
+    private boolean versionConflict = false;
+
+    private List<HistoricalFigure> availableFigures;
 
     public void loadData() {
         if (note != null) {
@@ -105,9 +118,96 @@ public class NoteEditView implements Serializable {
             note.setId(UUID.randomUUID());
         }
 
-        noteService.save(note);
-        UUID figureIdForRedirect = (note.getHistoricalFigure() != null) ? note.getHistoricalFigure().getId() : null;
-        return "/historicalfigure/figure?faces-redirect=true&figureId=" + figureIdForRedirect;
+        try {
+            noteService.save(note);
+            UUID figureIdForRedirect = (note.getHistoricalFigure() != null) ? note.getHistoricalFigure().getId() : null;
+            return "/historicalfigure/figure?faces-redirect=true&figureId=" + figureIdForRedirect;
+        } catch (OptimisticLockException e) {
+            handleVersionConflict();
+            return null;
+        } catch (EJBException e) {
+            // OptimisticLockException jest opakowany w EJBException
+            if (isOptimisticLockException(e)) {
+                handleVersionConflict();
+                return null;
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Obsługuje konflikt wersji - zapisuje dane użytkownika i pobiera aktualne z bazy
+     */
+    private void handleVersionConflict() {
+        versionConflict = true;
+
+        // Zachowaj dane wprowadzone przez użytkownika
+        userEnteredNote = new Note();
+        userEnteredNote.setTitle(note.getTitle());
+        userEnteredNote.setContent(note.getContent());
+        userEnteredNote.setMode(note.getMode());
+        userEnteredNote.setVersion(note.getVersion());
+
+        // Pobierz aktualne dane z bazy
+        currentDatabaseNote = noteService.findById(note.getId()).orElse(null);
+
+        // Zaktualizuj wersję w formularzu do aktualnej
+        if (currentDatabaseNote != null) {
+            note.setVersion(currentDatabaseNote.getVersion());
+        }
+
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Konflikt wersji", null));
+    }
+
+    /**
+     * Sprawdza czy wyjątek zawiera OptimisticLockException w łańcuchu przyczyn
+     */
+    private boolean isOptimisticLockException(Throwable e) {
+        Throwable cause = e;
+        while (cause != null) {
+            if (cause instanceof OptimisticLockException) {
+                return true;
+            }
+            // EclipseLink używa własnej klasy OptimisticLockException
+            if (cause.getClass().getName().contains("OptimisticLockException")) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
+    /**
+     * Przyjmuje aktualną wersję z bazy (nadpisuje zmiany użytkownika)
+     */
+    public String acceptCurrentVersion() {
+        if (currentDatabaseNote != null) {
+            note.setTitle(currentDatabaseNote.getTitle());
+            note.setContent(currentDatabaseNote.getContent());
+            note.setMode(currentDatabaseNote.getMode());
+            note.setVersion(currentDatabaseNote.getVersion());
+        }
+        versionConflict = false;
+        currentDatabaseNote = null;
+        userEnteredNote = null;
+        return null;
+    }
+
+    /**
+     * Próbuje ponownie zapisać dane użytkownika z aktualną wersją
+     */
+    public String retryWithUserData() {
+        if (userEnteredNote != null && currentDatabaseNote != null) {
+            note.setTitle(userEnteredNote.getTitle());
+            note.setContent(userEnteredNote.getContent());
+            note.setMode(userEnteredNote.getMode());
+            note.setVersion(currentDatabaseNote.getVersion());
+        }
+        versionConflict = false;
+        currentDatabaseNote = null;
+        userEnteredNote = null;
+        return save();
     }
 
     public Mode[] getModes() {
@@ -132,10 +232,11 @@ public class NoteEditView implements Serializable {
                 !note.getCreatedBy().getId().equals(currentUser.getId())) {
                 // Brak dostępu - przekieruj na listę notatek
                 try {
-                    String contextPath = facesContext.getExternalContext().getRequestContextPath();
-                    facesContext.getExternalContext().redirect(contextPath + "/note/notes.xhtml");
+                    FacesContext fc = FacesContext.getCurrentInstance();
+                    String contextPath = fc.getExternalContext().getRequestContextPath();
+                    fc.getExternalContext().redirect(contextPath + "/note/notes.xhtml");
                 } catch (IOException e) {
-                    facesContext.addMessage(null,
+                    FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Błąd", "Nie masz dostępu do edycji tej notatki"));
                 }

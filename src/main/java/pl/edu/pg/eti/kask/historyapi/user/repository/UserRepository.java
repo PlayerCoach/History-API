@@ -3,6 +3,9 @@ package pl.edu.pg.eti.kask.historyapi.user.repository;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import pl.edu.pg.eti.kask.historyapi.user.entity.User;
 
 import java.util.*;
@@ -14,7 +17,11 @@ public class UserRepository {
     private EntityManager em;
 
     public List<User> findAll() {
-        return em.createQuery("SELECT u FROM User u", User.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root);
+        return em.createQuery(cq).getResultList();
     }
 
     public Optional<User> findById(UUID id) {
@@ -22,10 +29,11 @@ public class UserRepository {
     }
 
     public Optional<User> findByLogin(String login) {
-        return em.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
-                .setParameter("login", login)
-                .getResultStream()
-                .findFirst();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root).where(cb.equal(root.get("login"), login));
+        return em.createQuery(cq).getResultStream().findFirst();
     }
 
     public void save(User user) {

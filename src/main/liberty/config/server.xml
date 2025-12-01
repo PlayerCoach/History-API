@@ -12,6 +12,7 @@
         <feature>enterpriseBeans-4.0</feature>
         <feature>appSecurity-5.0</feature>
         <feature>websocket-2.1</feature>
+        <feature>beanValidation-3.0</feature>
     </featureManager>
 
     <dataSource id="H2DataSource" jndiName="jdbc/historyDS">

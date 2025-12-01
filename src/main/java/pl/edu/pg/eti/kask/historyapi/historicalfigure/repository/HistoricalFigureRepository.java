@@ -3,6 +3,9 @@ package pl.edu.pg.eti.kask.historyapi.historicalfigure.repository;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import pl.edu.pg.eti.kask.historyapi.historicalfigure.entity.HistoricalFigure;
 
 import java.util.*;
@@ -16,8 +19,11 @@ public class HistoricalFigureRepository {
     public HistoricalFigureRepository() {}
 
     public List<HistoricalFigure> findAll() {
-        return em.createQuery("SELECT f FROM HistoricalFigure f", HistoricalFigure.class)
-                .getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<HistoricalFigure> cq = cb.createQuery(HistoricalFigure.class);
+        Root<HistoricalFigure> root = cq.from(HistoricalFigure.class);
+        cq.select(root);
+        return em.createQuery(cq).getResultList();
     }
 
     public Optional<HistoricalFigure> findById(UUID id) {
