@@ -27,7 +27,6 @@ import java.util.UUID;
 @ViewScoped
 public class NoteEditView implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
     @Inject
     private transient NoteService noteService;
